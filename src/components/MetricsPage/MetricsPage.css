@@ -1,0 +1,14 @@
+.pie-chart-visual-container {
+	display: flex;
+	justify-content: center;
+}
+
+.pie-chart-container .header,
+.area-chart-container .header {
+	padding-bottom: 2rem;
+}
+
+.pie-chart-container .header h1,
+.area-chart-container .header h1 {
+	font-weight: 400;
+}
