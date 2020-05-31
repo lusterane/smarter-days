@@ -1,0 +1,32 @@
+{
+	"name": "days",
+	"version": "1.0.0",
+	"description": "REST API for NLP app",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon app.js",
+		"dev": "concurrently \"npm start\" \"npm --prefix ./View start\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/lusterane/Day.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/lusterane/Day/issues"
+	},
+	"homepage": "https://github.com/lusterane/Day#readme",
+	"dependencies": {
+		"body-parser": "^1.19.0",
+		"concurrently": "^5.2.0",
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"mongoose": "^5.9.16",
+		"node-fetch": "^2.6.0"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.4"
+	}
+}

@@ -19,6 +19,24 @@
 	text-align: center;
 }
 
+#submission-button {
+	margin: 0 0.5rem;
+	padding: 0 2rem;
+}
+
+#or-text {
+	display: flex;
+	justify-content: center;
+	padding-top: 5vh;
+}
+
 .microphone-container {
-	padding: 0 1rem;
+	display: flex;
+	justify-content: center;
+	padding-top: 5vh;
+}
+
+.home-toast {
+	position: fixed;
+	bottom: 4vh;
 }
