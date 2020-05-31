@@ -1,0 +1,12 @@
+.header-text-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	text-align: center;
+	padding: 0rem 5rem 4rem 5rem;
+}
+
+.title {
+	padding-top: 3vh;
+}
