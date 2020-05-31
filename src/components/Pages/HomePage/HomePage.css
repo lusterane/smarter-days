@@ -1,0 +1,24 @@
+.home-page-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	padding-top: 10vh;
+
+	position: relative;
+}
+
+.user-input-box {
+	width: 50vw !important;
+}
+
+.user-input-row-wrapper {
+	display: flex;
+	justify-content: center;
+	text-align: center;
+}
+
+.microphone-container {
+	padding: 0 1rem;
+}

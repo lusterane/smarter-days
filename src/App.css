@@ -2,10 +2,24 @@
 
 body {
 	font-family: 'Comfortaa', cursive !important;
+}
+
+.main-container {
+	position: absolute;
 	height: 100vh;
 	width: 100vw;
 }
 
-.main-container {
-	padding: 5rem;
+.pointer {
+	cursor: pointer;
+}
+
+.remove-dec {
+	text-decoration: none;
+	color: black;
+}
+
+.remove-dec:hover {
+	text-decoration: underline;
+	color: black;
 }

@@ -1,4 +1,32 @@
 .header-container {
 	text-align: center;
-	padding-bottom: 4rem;
+	padding: 0rem 5rem 4rem 5rem;
+}
+
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	margin: 1vh 0;
+}
+
+.navbar-name {
+	font-size: 1.25rem;
+	font-weight: 500;
+}
+
+.title {
+	padding-top: 3vh;
+}
+
+.links {
+	display: flex;
+
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.link-option {
+	margin: 0 1rem;
 }
