@@ -61,7 +61,7 @@ class HomePage extends Component {
 	async getUtteranceHTTP() {
 		console.log('HTTP CALL: getUtteranceHTTP');
 		this.toggledIsLoaded();
-		const response = fetch('http://localhost:5000/utterance/' + this.state.userInput)
+		const response = fetch('http://localhost:5000/utterance/nlp/' + this.state.userInput)
 			.then((res) => res.json({ message: 'Recieved' }))
 			.then(
 				(result) => {
@@ -153,7 +153,10 @@ class HomePage extends Component {
 			headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
 			body: JSON.stringify(this.state.parsedResult),
 		};
-		const response = await fetch('http://localhost:5000/utterance/entry/', requestOptions).then(
+		const response = await fetch(
+			'http://localhost:5000/utterance/entries/',
+			requestOptions
+		).then(
 			(result) => {
 				return result.status;
 			},

@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const fetch = require('node-fetch');
 
 const Intent = require('../models/Intent');
 
 // GETS UTTERANCE DATA FROM WIT.AI
-router.get('/:utterance', async (req, res) => {
+router.get('/nlp/:utterance', async (req, res) => {
 	try {
 		const uri =
 			'https://api.wit.ai/message?v=20200513&q=' + encodeURIComponent(req.params.utterance);
@@ -21,17 +20,29 @@ router.get('/:utterance', async (req, res) => {
 	}
 });
 
-router.post('/entry', (req, res) => {
+// GETS ALL ENTRIES
+router.get('/entries', (req, res) => {
+	Intent.find()
+		.then((data) => {
+			console.log(data);
+			res.status(200).json(data);
+		})
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json(err);
+		});
+});
+
+// WRITES AN ENTRY OF UTTERANCE
+router.post('/entries', (req, res) => {
 	const request = req.body;
 	const { action, category, dateTime, duration, text } = request;
-
 	Intent.findOne({ category: category }, (err, intent) => {
 		if (err) {
 			console.log(err);
 		} else {
 			const resDuration = intent ? intent.sumDuration : { value: 0 };
 			const resElement = intent ? intent.elements : [];
-
 			Intent.findOneAndUpdate(
 				{ category: category },
 				{
