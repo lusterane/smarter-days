@@ -24,35 +24,43 @@ router.get('/:utterance', async (req, res) => {
 router.post('/entry', (req, res) => {
 	const request = req.body;
 	const { action, category, dateTime, duration, text } = request;
-	const reqDuration = {
-		unit: 'second',
-		value: 500,
-	};
-	const reqElements = [];
 
-	const intent = new Intent({
-		category: category,
-		sumDuration: {
-			unit: reqDuration.unit,
-			value: reqDuration.value + duration.value,
-		},
-		elements: reqElements.concat({
-			action: action,
-			duration: duration,
-			date: dateTime,
-			text: text,
-		}),
-	});
-
-	intent
-		.save()
-		.then((data) => {
-			res.status(200).json(data);
-		})
-		.catch((err) => {
+	Intent.findOne({ category: category }, (err, intent) => {
+		if (err) {
 			console.log(err);
-			res.status(500).json({ message: err });
-		});
+		} else {
+			const resDuration = intent ? intent.sumDuration : { value: 0 };
+			const resElement = intent ? intent.elements : [];
+
+			Intent.findOneAndUpdate(
+				{ category: category },
+				{
+					$set: {
+						category: category,
+						sumDuration: {
+							unit: duration.unit,
+							value: resDuration.value + duration.value,
+						},
+						elements: resElement.concat({
+							action: action,
+							duration: duration,
+							date: dateTime,
+							text: text,
+						}),
+					},
+				},
+				{ upsert: true }
+			)
+				.then((data) => {
+					console.log(data);
+					res.status(200).json(data);
+				})
+				.catch((err) => {
+					console.log(err);
+					res.status(500).json({ message: err });
+				});
+		}
+	});
 });
 
 module.exports = router;

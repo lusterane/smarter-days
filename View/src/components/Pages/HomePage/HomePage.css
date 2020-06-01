@@ -44,6 +44,6 @@
 .text-box-spinner {
 	position: absolute;
 	top: 2rem;
-	left: 7rem;
+	right: 7rem;
 	margin: 1rem 0;
 }
