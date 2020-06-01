@@ -40,3 +40,10 @@
 	position: fixed;
 	bottom: 4vh;
 }
+
+.text-box-spinner {
+	position: absolute;
+	top: 2rem;
+	left: 7rem;
+	margin: 1rem 0;
+}

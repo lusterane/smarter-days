@@ -11,6 +11,7 @@ import {
 	Toast,
 	ToastBody,
 	ToastHeader,
+	Spinner,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
@@ -51,25 +52,39 @@ class HomePage extends Component {
 		}
 	};
 
-	getUtteranceHTTP = () => {
+	toggledIsLoaded = () => {
+		this.setState((state, props) => ({
+			isLoaded: !state.isLoaded,
+		}));
+	};
+
+	async getUtteranceHTTP() {
 		console.log('HTTP CALL: getUtteranceHTTP');
-		fetch('http://localhost:5000/utterance/' + this.state.userInput)
+		this.toggledIsLoaded();
+		const response = fetch('http://localhost:5000/utterance/' + this.state.userInput)
 			.then((res) => res.json({ message: 'Recieved' }))
 			.then(
 				(result) => {
 					this.setState({
-						isLoaded: true,
 						utterance: result,
 					});
-					console.log(result);
 					this.parseUtteranceResult(result);
 
 					let message = '-';
 					let title = 'Notice';
 					if (this.validateData()) {
-						message = 'Your activity has been successfuly added!';
-						this.showToast('success', title, message);
-						console.log('valid utterance');
+						const res = this.postUtteranceToDatabase();
+						res.then((res) => {
+							if (res === 200) {
+								message = 'Your activity has been successfuly added!';
+								this.showToast('success', title, message);
+							} else {
+								message =
+									'Sorry, something went wrong on our end. Give us a moment while we try to sort it out';
+								this.showToast('warning', title, message);
+							}
+							console.log('valid utterance');
+						});
 					} else {
 						message = `Sorry, I don't understand '${this.state.parsedResult.text}'`;
 						this.showToast('danger', title, message);
@@ -82,12 +97,15 @@ class HomePage extends Component {
 				(error) => {
 					console.log('error');
 					this.setState({
-						isLoaded: true,
 						error,
 					});
 				}
 			);
-	};
+
+		response.then(() => {
+			this.toggledIsLoaded();
+		});
+	}
 
 	parseUtteranceResult = (result) => {
 		let buildParsedResult = { ...emptyParsedResult };
@@ -108,18 +126,53 @@ class HomePage extends Component {
 						buildParsedResult.duration.unit = currentElement.normalized.unit;
 						buildParsedResult.duration.value = currentElement.normalized.value;
 					} else if (currentElement.name.includes('wit$datetime')) {
-						buildParsedResult.dateTime = currentElement.value;
+						buildParsedResult.dateTime = new Date(currentElement.value);
 					} else {
 						// everything else
 						buildParsedResult.action = currentElement.value;
 					}
 				}
+
+				// add datetime if not exist
+				if (buildParsedResult.dateTime === '') {
+					buildParsedResult.dateTime = new Date();
+				}
 			});
 		} else {
 			lowConf = true;
 		}
+
 		this.setState({ parsedResult: buildParsedResult });
 	};
+
+	async postUtteranceToDatabase() {
+		console.log('HTTP CALL: getUtteranceHTTP');
+
+		const requestOptions = {
+			method: 'POST',
+			headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+			body: JSON.stringify(this.state.parsedResult),
+		};
+		const response = await fetch('http://localhost:5000/utterance/entry/', requestOptions).then(
+			(result) => {
+				return result.status;
+			},
+			// Note: it's important to handle errors here
+			// instead of a catch() block so that we don't swallow
+			// exceptions from actual bugs in components.
+			(error) => {
+				console.log('error');
+				this.setState({
+					error,
+				});
+
+				return error.status;
+			}
+		);
+
+		let data = await response;
+		return data;
+	}
 
 	// checks if data is correct
 	validateData = () => {
@@ -145,11 +198,12 @@ class HomePage extends Component {
 	};
 
 	render() {
-		const { toast } = this.state;
+		const { toast, isLoaded } = this.state;
 		return (
 			<React.Fragment>
 				<div className='home-page-container'>
 					<HeaderText />
+					{isLoaded ? <Spinner className='text-box-spinner' animation='border' /> : ''}
 					<Form className='user-input-form' onSubmit={this.onFormSubmit.bind(this)}>
 						<FormGroup row>
 							<div className='user-input-row-wrapper'>
