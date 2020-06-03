@@ -42,16 +42,16 @@ class PieChart extends Component {
 		};
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-		const { intent } = this.props;
+	componentDidUpdate() {
+		const { intents } = this.props;
 		const { updatedFromProps } = this.state;
-		if (intent.length > 0 && updatedFromProps === false) {
-			this.setState({ updatedFromProps: true }, this.updateChart(intent));
+		if (intents.length > 0 && updatedFromProps === false) {
+			this.setState({ updatedFromProps: true }, this.updateChart(intents));
 		}
 	}
 
 	// ran once when props are recieved
-	updateChart = (intent) => {
+	updateChart = (intents) => {
 		let series = { ...this.state.series };
 		let options = { ...this.state.options };
 
@@ -59,13 +59,13 @@ class PieChart extends Component {
 		options.labels = [];
 		series = [];
 
-		intent.forEach((intent) => {
-			const { category, sumDuration } = intent;
+		intents.forEach((intents) => {
+			const { category, sumDuration } = intents;
 			options.labels.push(category);
 			series.push(sumDuration.value);
 		});
 
-		this.setState((state, props) => ({ series: series, options: options }));
+		this.setState({ series: series, options: options });
 	};
 
 	render() {

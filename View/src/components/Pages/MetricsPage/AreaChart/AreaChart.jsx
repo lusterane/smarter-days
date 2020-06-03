@@ -7,6 +7,7 @@ class AreaChart extends Component {
 		super(props);
 
 		this.state = {
+			propsLoaded: false,
 			series: [
 				{
 					name: 'Exercise',
@@ -38,6 +39,20 @@ class AreaChart extends Component {
 				},
 			],
 			options: {
+				yaxis: {
+					title: {
+						text: 'Duration (Seconds)',
+					},
+				},
+				colors: [
+					'#2E93fA',
+					'#66DA26',
+					'#546E7A',
+					'#E91E63',
+					'#FF9800',
+					'#ADBDFF',
+					'#6B2D5C',
+				],
 				chart: {
 					height: 350,
 					type: 'area',
@@ -69,6 +84,93 @@ class AreaChart extends Component {
 		};
 	}
 
+	componentDidUpdate(prevProps, prevState) {
+		const { intents, timeInterval } = this.props;
+		if (prevProps.intents !== intents) {
+			this.setState({ propsLoaded: true }, this.updateChart(intents));
+		}
+
+		if (prevProps.timeInterval != timeInterval) {
+			this.updateYaxisLabel(timeInterval);
+			this.updateTimeValues(timeInterval, intents);
+		}
+	}
+
+	updateYaxisLabel = (timeInterval) => {
+		let yAxisName = '';
+
+		switch (timeInterval) {
+			case 'seconds':
+				yAxisName = 'Duration (Seconds)';
+				break;
+			case 'minutes':
+				yAxisName = 'Duration (Minutes)';
+				break;
+			case 'hours':
+				yAxisName = 'Duration (Hours)';
+				break;
+		}
+
+		let updatedYAxis = JSON.parse(JSON.stringify(this.state.options));
+		updatedYAxis.yaxis.title.text = yAxisName;
+		this.setState({ options: updatedYAxis });
+	};
+
+	updateTimeValues = (timeInterval, intents) => {
+		let newSeries = JSON.parse(JSON.stringify(this.state.series));
+
+		newSeries = intents.map((intent) => {
+			const { category, elements } = intent;
+
+			const seriesData = elements.map((element) => {
+				const { seconds, minutes, hours } = element.durationForms;
+				switch (timeInterval) {
+					case 'seconds':
+						return seconds;
+					case 'minutes':
+						return minutes;
+					case 'hours':
+						return hours;
+				}
+			});
+
+			return {
+				name: category,
+				data: seriesData,
+			};
+		});
+
+		this.setState({ series: newSeries });
+	};
+
+	// ran once when props are recieved
+	updateChart = (intents) => {
+		let series = { ...this.state.series };
+		let options = { ...this.state.options };
+
+		// reset state data points
+		options.xaxis.categories = [];
+		series = [];
+
+		intents.forEach((intents) => {
+			const buildCategories = []; // dates
+			const buildData = []; // durations
+			const categoryName = intents.category;
+			intents.elements.forEach((element) => {
+				const { date, duration } = element;
+				buildCategories.push(date);
+				buildData.push(duration.value);
+			});
+
+			series.push({
+				name: categoryName,
+				data: buildData,
+			});
+			options.xaxis.categories = buildCategories;
+		});
+		this.setState({ series: series, options: options });
+	};
+
 	generateDayWiseTimeSeries = (baseval, count, yrange) => {
 		var i = 0;
 		var series = [];
@@ -86,12 +188,16 @@ class AreaChart extends Component {
 	render() {
 		return (
 			<div id='chart'>
-				<ReactApexChart
-					options={this.state.options}
-					series={this.state.series}
-					type='area'
-					height={350}
-				/>
+				{this.state.propsLoaded ? (
+					<ReactApexChart
+						options={this.state.options}
+						series={this.state.series}
+						type='area'
+						height={350}
+					/>
+				) : (
+					''
+				)}
 			</div>
 		);
 	}
