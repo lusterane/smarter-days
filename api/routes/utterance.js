@@ -41,17 +41,12 @@ router.post('/entries', (req, res) => {
 		if (err) {
 			console.log(err);
 		} else {
-			const resDuration = intent ? intent.sumDuration : { value: 0 };
 			const resElement = intent ? intent.elements : [];
 			Intent.findOneAndUpdate(
 				{ category: category },
 				{
 					$set: {
 						category: category,
-						sumDuration: {
-							unit: duration.unit,
-							value: resDuration.value + duration.value,
-						},
 						elements: resElement.concat({
 							action: action,
 							duration: duration,

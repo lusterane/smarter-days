@@ -42,22 +42,38 @@ class PieChart extends Component {
 		};
 	}
 
-	componentDidUpdate() {
+	componentDidUpdate(prevProps, prevState) {
 		const { intents } = this.props;
-		const { updatedFromProps } = this.state;
-		if (intents.length > 0 && updatedFromProps === false) {
+		// console.log(intents[0].sumDuration);
+		if (prevProps.intents !== intents) {
 			this.setState({ updatedFromProps: true }, this.updateChart(intents));
 		}
 	}
 
 	// ran once when props are recieved
 	updateChart = (intents) => {
-		let series = { ...this.state.series };
-		let options = { ...this.state.options };
-
 		// reset state data points
-		options.labels = [];
-		series = [];
+		let options = {
+			chart: {
+				width: 380,
+				type: 'pie',
+			},
+			labels: [],
+			responsive: [
+				{
+					breakpoint: 480,
+					options: {
+						chart: {
+							width: 200,
+						},
+						legend: {
+							position: 'bottom',
+						},
+					},
+				},
+			],
+		};
+		let series = [];
 
 		intents.forEach((intents) => {
 			const { category, sumDuration } = intents;
@@ -69,7 +85,8 @@ class PieChart extends Component {
 	};
 
 	render() {
-		return (
+		const { updatedFromProps } = this.state;
+		return updatedFromProps ? (
 			<div id='chart'>
 				<ReactApexChart
 					options={this.state.options}
@@ -78,6 +95,8 @@ class PieChart extends Component {
 					width={380}
 				/>
 			</div>
+		) : (
+			''
 		);
 	}
 }

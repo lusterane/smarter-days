@@ -66,18 +66,18 @@ class AreaChart extends Component {
 				xaxis: {
 					type: 'datetime',
 					categories: [
-						'2020-05-20T00:00:00.000Z',
-						'2020-05-21T00:00:00.000Z',
-						'2020-05-22T00:00:00.000Z',
-						'2020-05-23T00:00:00.000Z',
-						'2020-05-24T00:00:00.000Z',
-						'2020-05-25T00:00:00.000Z',
-						'2020-05-26T00:00:00.000Z',
+						'2020-05-20T01:00:00.000Z',
+						'2020-05-20T02:00:00.000Z',
+						'2020-05-20T03:00:00.000Z',
+						'2020-05-20T04:00:00.000Z',
+						'2020-05-20T05:00:30.000Z',
+						'2020-05-20T06:00:00.000Z',
+						'2020-05-20T07:00:00.000Z',
 					],
 				},
 				tooltip: {
 					x: {
-						format: 'dd/MM/yy HH:mm',
+						format: 'MM/dd/yy HH:mm:ss',
 					},
 				},
 			},
@@ -85,14 +85,15 @@ class AreaChart extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		const { intents, timeInterval } = this.props;
+		const { intents, timeInterval, view } = this.props;
 		if (prevProps.intents !== intents) {
 			this.setState({ propsLoaded: true }, this.updateChart(intents));
+			// this.setState({ propsLoaded: true });
 		}
 
-		if (prevProps.timeInterval != timeInterval) {
-			this.updateYaxisLabel(timeInterval);
+		if (prevProps.timeInterval !== timeInterval) {
 			this.updateTimeValues(timeInterval, intents);
+			this.updateYaxisLabel(timeInterval);
 		}
 	}
 
@@ -118,7 +119,6 @@ class AreaChart extends Component {
 
 	updateTimeValues = (timeInterval, intents) => {
 		let newSeries = JSON.parse(JSON.stringify(this.state.series));
-
 		newSeries = intents.map((intent) => {
 			const { category, elements } = intent;
 
@@ -139,7 +139,6 @@ class AreaChart extends Component {
 				data: seriesData,
 			};
 		});
-
 		this.setState({ series: newSeries });
 	};
 

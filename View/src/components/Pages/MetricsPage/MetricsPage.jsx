@@ -10,20 +10,23 @@ import './MetricsPage.css';
 class MetricsPage extends Component {
 	state = {
 		intents: [],
-		view: 'day',
+		view: 'week',
 		timeInterval: 'seconds',
-		dropDownItemStatus: {
+		timeDropDownStatus: {
 			secondsSelected: true,
 			minutesSelected: false,
 			hoursSelected: false,
+		},
+		viewDropDownStatus: {
+			daySelected: false,
+			weekSelected: true,
+			monthSelected: false,
 		},
 	};
 
 	componentDidMount() {
 		this.getIntentsFromDB();
 	}
-
-	componentDidUpdate(prevProps, prevState) {}
 
 	async getIntentsFromDB() {
 		console.log('HTTP CALL: getIntentsFromDB');
@@ -36,10 +39,17 @@ class MetricsPage extends Component {
 			.then((res) => res.json({ message: 'Recieved' }))
 			.then(
 				(result) => {
-					const filteredIntents = this.filterForDates(result);
-					let normalizedResult = this.normalizeStepFunction(filteredIntents);
+					let filteredIntents = this.filterForDates(result);
+					filteredIntents = this.calculateTimeIntervals(filteredIntents);
+					filteredIntents = this.setSumDuration(filteredIntents);
+					filteredIntents = this.normalizeStepFunction(filteredIntents);
+
+					let normalizedResult = this.normalizeStepFunction(result);
+					normalizedResult = this.calculateTimeIntervals(normalizedResult);
+
 					this.setState({
 						intents: normalizedResult,
+						filteredIntents: filteredIntents,
 					});
 					return result.status;
 				},
@@ -60,8 +70,21 @@ class MetricsPage extends Component {
 		return data;
 	}
 
-	filterForDates = (intents) => {
-		const { view } = this.state;
+	setSumDuration = (intents) => {
+		const newState = JSON.parse(JSON.stringify(intents));
+		newState.forEach((intent) => {
+			let sumDuration = 0;
+			intent.elements.forEach((element) => {
+				sumDuration += element.duration.value;
+			});
+			intent.sumDuration = { unit: 'second', value: sumDuration };
+		});
+
+		return newState;
+	};
+
+	filterForDates = (intents, paramView) => {
+		const view = paramView ? paramView : this.state.view;
 
 		let filteredIntents = JSON.parse(JSON.stringify(intents));
 
@@ -73,25 +96,59 @@ class MetricsPage extends Component {
 
 		if (view === 'day') {
 			const fromDate = new Date(ndYear, ndMonth, ndDay, 0, 0, 0, 0);
-			const toDate = new Date(ndYear, ndMonth, ndDay, 59, 59, 999);
+			const toDate = new Date(ndYear, ndMonth, ndDay, 23, 59, 59, 999);
 			filteredIntents.forEach((intent) => {
 				intent.elements = intent.elements.filter(
 					(element) =>
-						fromDate <= new Date(element.date) && toDate >= new Date(element.date)
+						fromDate.getTime() < new Date(element.date).getTime() &&
+						toDate.getTime() > new Date(element.date).getTime()
 				);
 			});
-		}
+			// console.log('day');
+			// console.log('fromdate', fromDate);
+			// console.log('toDate', toDate);
+		} else if (view === 'week') {
+			let fromDate = new Date(nowDate.setDate(nowDate.getDate() - nowDate.getDay() + 1));
+			let toDate = new Date(nowDate.setDate(nowDate.getDate() - nowDate.getDay() + 7));
+			fromDate.setHours(0, 0, 0, 0);
+			toDate.setHours(23, 59, 59, 999);
+			filteredIntents.forEach((intent) => {
+				intent.elements = intent.elements.filter(
+					(element) =>
+						fromDate.getTime() < new Date(element.date).getTime() &&
+						toDate.getTime() > new Date(element.date).getTime()
+				);
+			});
 
+			// console.log('week');
+			// console.log('fromdate', fromDate);
+			// console.log('toDate', toDate);
+		} else if (view === 'month') {
+			let fromDate = new Date(ndYear, ndMonth, 1);
+			let toDate = new Date(ndYear, ndMonth + 1, 0);
+			fromDate.setHours(0, 0, 0, 0);
+			toDate.setHours(23, 59, 59, 999);
+			filteredIntents.forEach((intent) => {
+				intent.elements = intent.elements.filter(
+					(element) =>
+						fromDate.getTime() < new Date(element.date).getTime() &&
+						toDate.getTime() > new Date(element.date).getTime()
+				);
+			});
+
+			// console.log('month');
+			// console.log('fromdate', fromDate);
+			// console.log('toDate', toDate);
+		}
 		return filteredIntents;
 	};
 
 	normalizeStepFunction = (result) => {
 		let normalizedResult = this.normalizeCategoryNames(result);
-		normalizedResult = this.normalizeDates(normalizedResult);
-		normalizedResult = this.calculateTimeIntervals(normalizedResult);
 
 		return normalizedResult;
 	};
+
 	normalizeCategoryNames = (result) => {
 		let normalizedResult = JSON.parse(JSON.stringify(result));
 		normalizedResult.forEach((element) => {
@@ -112,6 +169,7 @@ class MetricsPage extends Component {
 		return normalizedResult;
 	};
 
+	// ran once
 	calculateTimeIntervals = (result) => {
 		let normalizedResult = JSON.parse(JSON.stringify(result));
 		normalizedResult.forEach((intent) => {
@@ -130,18 +188,6 @@ class MetricsPage extends Component {
 					minutes: minutesVal,
 					hours: hoursVal,
 				};
-			});
-		});
-		return normalizedResult;
-	};
-
-	normalizeDates = (result) => {
-		let normalizedResult = JSON.parse(JSON.stringify(result));
-		normalizedResult.forEach((intent) => {
-			intent.elements.forEach((element) => {
-				// element.date = '2020-05-21T00:00:00.000Z';
-				// element.date = new Date(element.date).getTime();
-				element.date = element.date;
 			});
 		});
 		return normalizedResult;
@@ -186,11 +232,11 @@ class MetricsPage extends Component {
 		}
 	};
 
-	handleDropDownItemClick = (dropDownItem) => {
+	handleTimeDropDownClick = (dropDownItem) => {
 		switch (dropDownItem) {
 			case 'seconds':
 				this.setState({
-					dropDownItemStatus: {
+					timeDropDownStatus: {
 						secondsSelected: true,
 						minutesSelected: false,
 						hoursSelected: false,
@@ -200,7 +246,7 @@ class MetricsPage extends Component {
 				break;
 			case 'minutes':
 				this.setState({
-					dropDownItemStatus: {
+					timeDropDownStatus: {
 						secondsSelected: false,
 						minutesSelected: true,
 						hoursSelected: false,
@@ -210,7 +256,7 @@ class MetricsPage extends Component {
 				break;
 			case 'hours':
 				this.setState({
-					dropDownItemStatus: {
+					timeDropDownStatus: {
 						secondsSelected: false,
 						minutesSelected: false,
 						hoursSelected: true,
@@ -221,8 +267,56 @@ class MetricsPage extends Component {
 		}
 	};
 
+	handleViewDropDownClick = (dropDownItem) => {
+		switch (dropDownItem) {
+			case 'day':
+				this.setState((state, props) => ({
+					viewDropDownStatus: {
+						daySelected: true,
+						weekSelected: false,
+						monthSelected: false,
+					},
+					view: 'day',
+					filteredIntents: this.setSumDuration(this.filterForDates(state.intents, 'day')),
+				}));
+				break;
+			case 'week':
+				this.setState((state, props) => ({
+					viewDropDownStatus: {
+						daySelected: false,
+						weekSelected: true,
+						monthSelected: false,
+					},
+					view: 'week',
+					filteredIntents: this.setSumDuration(
+						this.filterForDates(state.intents, 'week')
+					),
+				}));
+				break;
+			default:
+				// month
+				this.setState((state, props) => ({
+					viewDropDownStatus: {
+						daySelected: false,
+						weekSelected: false,
+						monthSelected: true,
+					},
+					view: 'month',
+					filteredIntents: this.setSumDuration(
+						this.filterForDates(state.intents, 'month')
+					),
+				}));
+				break;
+		}
+	};
+
 	render() {
-		const { intents, view, dropDownItemStatus, timeInterval } = this.state;
+		const {
+			filteredIntents,
+			viewDropDownStatus,
+			timeDropDownStatus,
+			timeInterval,
+		} = this.state;
 		return (
 			<React.Fragment>
 				<div className='metrics-page-container'>
@@ -231,39 +325,68 @@ class MetricsPage extends Component {
 						<DropdownToggle caret>Time Interval</DropdownToggle>
 						<DropdownMenu>
 							<DropdownItem
-								disabled={dropDownItemStatus.secondsSelected}
+								disabled={timeDropDownStatus.secondsSelected}
 								onClick={() => {
-									this.handleDropDownItemClick('seconds');
+									this.handleTimeDropDownClick('seconds');
 								}}
 							>
 								Seconds
 							</DropdownItem>
 							<DropdownItem
-								disabled={dropDownItemStatus.minutesSelected}
+								disabled={timeDropDownStatus.minutesSelected}
 								onClick={() => {
-									this.handleDropDownItemClick('minutes');
+									this.handleTimeDropDownClick('minutes');
 								}}
 							>
 								Minutes
 							</DropdownItem>
 							<DropdownItem
-								disabled={dropDownItemStatus.hoursSelected}
+								disabled={timeDropDownStatus.hoursSelected}
 								onClick={() => {
-									this.handleDropDownItemClick('hours');
+									this.handleTimeDropDownClick('hours');
 								}}
 							>
 								Hours
 							</DropdownItem>
 						</DropdownMenu>
 					</UncontrolledDropdown>
+					<UncontrolledDropdown>
+						<DropdownToggle caret>View</DropdownToggle>
+						<DropdownMenu>
+							<DropdownItem
+								disabled={viewDropDownStatus.daySelected}
+								onClick={() => {
+									this.handleViewDropDownClick('day');
+								}}
+							>
+								Day
+							</DropdownItem>
+							<DropdownItem
+								disabled={viewDropDownStatus.weekSelected}
+								onClick={() => {
+									this.handleViewDropDownClick('week');
+								}}
+							>
+								Week
+							</DropdownItem>
+							<DropdownItem
+								disabled={viewDropDownStatus.monthSelected}
+								onClick={() => {
+									this.handleViewDropDownClick('month');
+								}}
+							>
+								Month
+							</DropdownItem>
+						</DropdownMenu>
+					</UncontrolledDropdown>
 					<div className='pie-chart-container'>
 						<div className='pie-chart-visual-container'>
-							<PieChart intents={intents} id='pie-chart' />
+							<PieChart intents={filteredIntents} id='pie-chart' />
 						</div>
 					</div>
 					<div className='area-chart-container'>
 						<div className='area-chart-visual-container'>
-							<AreaChart intents={intents} timeInterval={timeInterval} />
+							<AreaChart intents={filteredIntents} timeInterval={timeInterval} />
 						</div>
 					</div>
 				</div>
