@@ -39,3 +39,7 @@
 .card {
 	box-shadow: 22px 22px 35px -16px rgba(0, 0, 0, 0.1);
 }
+
+.table {
+	padding-top: 5vh !important;
+}

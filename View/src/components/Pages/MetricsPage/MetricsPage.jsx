@@ -12,6 +12,7 @@ import {
 
 import PieChart from './PieChart/PieChart';
 import AreaChart from './AreaChart/AreaChart';
+import Table from './Table/Table';
 
 import './MetricsPage.css';
 
@@ -383,6 +384,7 @@ class MetricsPage extends Component {
 								<AreaChart intents={filteredIntents} timeInterval={timeInterval} />
 							</div>
 						</div>
+						<Table intents={filteredIntents} timeInterval={timeInterval} />
 					</div>
 				</div>
 			</React.Fragment>

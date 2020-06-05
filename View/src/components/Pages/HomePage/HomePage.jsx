@@ -226,6 +226,7 @@ class HomePage extends Component {
 							<FontAwesomeIcon icon={faMicrophone} size='2x' className='pointer' />
 						</div>
 					</Form>
+
 					{toast.show ? (
 						<Toast className='home-toast'>
 							<ToastHeader icon={toast.icon}>{toast.title}</ToastHeader>
