@@ -22,30 +22,22 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
 function createData(category, activity, date, hours, utterance) {
-	return { category, activity, date, hours, utterance };
+	return { category, activity, hours, utterance, date };
 }
 
-const rows = [
-	createData('Cupcake', 305, 3.7, 67, new Date().toISOString()),
-	createData('Donut', 452, 25.0, 51, new Date().toISOString()),
-	createData('Eclair', 262, 16.0, 24, new Date().toISOString()),
-	createData('Frozen yoghurt', 159, 6.0, 24, new Date().toISOString()),
-	createData('Gingerbread', 356, 16.0, 49, new Date().toISOString()),
-	createData('Honeycomb', 408, 3.2, 87, new Date().toISOString()),
-	createData('Ice cream sandwich', 237, 9.0, 37, new Date().toISOString()),
-	createData('Jelly Bean', 375, 0.0, 94, new Date().toISOString()),
-	createData('KitKat', 518, 26.0, 65, new Date().toISOString()),
-	createData('Lollipop', 392, 0.2, 98, new Date().toISOString()),
-	createData('Marshmallow', 318, 0, 81, new Date().toISOString()),
-	createData('Nougat', 360, 19.0, 9, new Date().toISOString()),
-	createData('Oreo', 437, 18.0, 63, new Date('2020-07-05T03:16:16.072Z').toISOString()),
-];
-
 function descendingComparator(a, b, orderBy) {
-	if (b[orderBy] < a[orderBy]) {
+	let y_a = JSON.parse(JSON.stringify(a));
+	let y_b = JSON.parse(JSON.stringify(b));
+	if (orderBy === 'date') {
+		// check if date
+		y_a[orderBy] = new Date(a[orderBy]);
+		y_b[orderBy] = new Date(b[orderBy]);
+	}
+
+	if (y_b[orderBy] < y_a[orderBy]) {
 		return -1;
 	}
-	if (b[orderBy] > a[orderBy]) {
+	if (y_b[orderBy] > y_a[orderBy]) {
 		return 1;
 	}
 	return 0;
@@ -177,22 +169,18 @@ const EnhancedTableToolbar = (props) => {
 				</Typography>
 			) : (
 				<Typography className={classes.title} variant='h6' id='tableTitle' component='div'>
-					Nutrition
+					Your Log
 				</Typography>
 			)}
 
 			{numSelected > 0 ? (
-				<Tooltip title='Delete'>
+				<Tooltip title='Disabled for demo'>
 					<IconButton aria-label='delete'>
 						<DeleteIcon />
 					</IconButton>
 				</Tooltip>
 			) : (
-				<Tooltip title='Filter list'>
-					<IconButton aria-label='filter list'>
-						<FilterListIcon />
-					</IconButton>
-				</Tooltip>
+				''
 			)}
 		</Toolbar>
 	);
@@ -229,11 +217,16 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable(props) {
 	const classes = useStyles();
 	const [order, setOrder] = React.useState('asc');
-	const [orderBy, setOrderBy] = React.useState('activity');
+	const [orderBy, setOrderBy] = React.useState('hours');
 	const [selected, setSelected] = React.useState([]);
 	const [page, setPage] = React.useState(0);
 	const [dense, setDense] = React.useState(false);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+	const normalizeDate = (date) => {
+		let normalized = new Date(date).toString();
+		return normalized;
+	};
 
 	const getRows = () => {
 		const { intents } = props;
@@ -244,26 +237,13 @@ export default function EnhancedTable(props) {
 				intent.elements.forEach((element) => {
 					const { action, duration, text, date, _id } = element;
 					const { category } = intent;
-					ret_arr.push(createData(category, action, duration.value, text, date, _id));
+					ret_arr.push(
+						createData(category, action, normalizeDate(date), duration.value, text, _id)
+					);
 				});
 			});
 		}
 		return ret_arr;
-		// [
-		// 	createData('Cupcake', 305, 3.7, 67, new Date().toISOString()),
-		// 	createData('Donut', 452, 25.0, 51, new Date().toISOString()),
-		// 	createData('Eclair', 262, 16.0, 24, new Date().toISOString()),
-		// 	createData('Frozen yoghurt', 159, 6.0, 24, new Date().toISOString()),
-		// 	createData('Gingerbread', 356, 16.0, 49, new Date().toISOString()),
-		// 	createData('Honeycomb', 408, 3.2, 87, new Date().toISOString()),
-		// 	createData('Ice cream sandwich', 237, 9.0, 37, new Date().toISOString()),
-		// 	createData('Jelly Bean', 375, 0.0, 94, new Date().toISOString()),
-		// 	createData('KitKat', 518, 26.0, 65, new Date().toISOString()),
-		// 	createData('Lollipop', 392, 0.2, 98, new Date().toISOString()),
-		// 	createData('Marshmallow', 318, 0, 81, new Date().toISOString()),
-		// 	createData('Nougat', 360, 19.0, 9, new Date().toISOString()),
-		// 	createData('Oreo', 437, 18.0, 63, new Date('2020-07-05T03:16:16.072Z').toISOString()),
-		// ];
 	};
 
 	let data_row = getRows();
@@ -299,7 +279,7 @@ export default function EnhancedTable(props) {
 				selected.slice(selectedIndex + 1)
 			);
 		}
-
+		console.log(newSelected);
 		setSelected(newSelected);
 	};
 
@@ -372,9 +352,9 @@ export default function EnhancedTable(props) {
 												{row.category}
 											</TableCell>
 											<TableCell align='right'>{row.activity}</TableCell>
-											<TableCell align='right'>{row.date}</TableCell>
 											<TableCell align='right'>{row.hours}</TableCell>
 											<TableCell align='right'>{row.utterance}</TableCell>
+											<TableCell align='right'>{row.date}</TableCell>
 										</TableRow>
 									);
 								})}
