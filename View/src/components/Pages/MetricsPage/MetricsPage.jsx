@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {
+	UncontrolledDropdown,
+	DropdownItem,
+	Nav,
+	NavItem,
+	DropdownToggle,
+	DropdownMenu,
+	NavLink,
+} from 'reactstrap';
 
 import PieChart from './PieChart/PieChart';
 import AreaChart from './AreaChart/AreaChart';
@@ -16,11 +24,6 @@ class MetricsPage extends Component {
 			secondsSelected: true,
 			minutesSelected: false,
 			hoursSelected: false,
-		},
-		viewDropDownStatus: {
-			daySelected: false,
-			weekSelected: true,
-			monthSelected: false,
 		},
 	};
 
@@ -39,16 +42,13 @@ class MetricsPage extends Component {
 			.then((res) => res.json({ message: 'Recieved' }))
 			.then(
 				(result) => {
-					let filteredIntents = this.filterForDates(result);
-					filteredIntents = this.calculateTimeIntervals(filteredIntents);
-					filteredIntents = this.setSumDuration(filteredIntents);
-					filteredIntents = this.normalizeStepFunction(filteredIntents);
+					let use_result = this.calculateTimeIntervals(result);
+					use_result = this.normalizeCategoryNames(use_result);
 
-					let normalizedResult = this.normalizeStepFunction(result);
-					normalizedResult = this.calculateTimeIntervals(normalizedResult);
+					let filteredIntents = this.stepFunction(use_result);
 
 					this.setState({
-						intents: normalizedResult,
+						intents: use_result, // original
 						filteredIntents: filteredIntents,
 					});
 					return result.status;
@@ -70,6 +70,15 @@ class MetricsPage extends Component {
 		return data;
 	}
 
+	stepFunction = (intents, paramView) => {
+		let ret_intents = this.sortByDates(intents);
+		ret_intents = this.filterForDates(ret_intents, paramView);
+		ret_intents = this.setSumDuration(ret_intents);
+		ret_intents = this.normalizeDatesToTimezone(ret_intents);
+
+		return ret_intents;
+	};
+
 	setSumDuration = (intents) => {
 		const newState = JSON.parse(JSON.stringify(intents));
 		newState.forEach((intent) => {
@@ -83,6 +92,17 @@ class MetricsPage extends Component {
 		return newState;
 	};
 
+	sortByDates = (intents) => {
+		const sortedIntents = JSON.parse(JSON.stringify(intents));
+
+		sortedIntents.forEach((intent) => {
+			intent.elements.sort((a, b) => {
+				return new Date(a.date).getTime() - new Date(b.date).getTime();
+			});
+		});
+
+		return sortedIntents;
+	};
 	filterForDates = (intents, paramView) => {
 		const view = paramView ? paramView : this.state.view;
 
@@ -143,8 +163,13 @@ class MetricsPage extends Component {
 		return filteredIntents;
 	};
 
-	normalizeStepFunction = (result) => {
-		let normalizedResult = this.normalizeCategoryNames(result);
+	normalizeDatesToTimezone = (result) => {
+		let normalizedResult = JSON.parse(JSON.stringify(result));
+		normalizedResult.forEach((intents) => {
+			intents.elements.forEach((element) => {
+				//element.date = new Date(element.date);
+			});
+		});
 
 		return normalizedResult;
 	};
@@ -193,45 +218,6 @@ class MetricsPage extends Component {
 		return normalizedResult;
 	};
 
-	getHeaderJSX = () => {
-		const { view } = this.state;
-
-		switch (view) {
-			case 'day':
-				return (
-					<div className='header'>
-						<h1>Today</h1>
-						<span>Your stats for today</span>
-						<hr></hr>
-					</div>
-				);
-			case 'week':
-				return (
-					<div className='header'>
-						<h1>Week</h1>
-						<span>Your week at a glance</span>
-						<hr></hr>
-					</div>
-				);
-			case 'month':
-				return (
-					<div className='header'>
-						<h1>Month</h1>
-						<span>Your month at a glance</span>
-						<hr></hr>
-					</div>
-				);
-			default:
-				return (
-					<div className='header'>
-						<h1>Today</h1>
-						<span>Your stats for today</span>
-						<hr></hr>
-					</div>
-				);
-		}
-	};
-
 	handleTimeDropDownClick = (dropDownItem) => {
 		switch (dropDownItem) {
 			case 'seconds':
@@ -277,7 +263,7 @@ class MetricsPage extends Component {
 						monthSelected: false,
 					},
 					view: 'day',
-					filteredIntents: this.setSumDuration(this.filterForDates(state.intents, 'day')),
+					filteredIntents: this.stepFunction(state.intents, 'day'),
 				}));
 				break;
 			case 'week':
@@ -288,9 +274,7 @@ class MetricsPage extends Component {
 						monthSelected: false,
 					},
 					view: 'week',
-					filteredIntents: this.setSumDuration(
-						this.filterForDates(state.intents, 'week')
-					),
+					filteredIntents: this.stepFunction(state.intents, 'week'),
 				}));
 				break;
 			default:
@@ -302,9 +286,7 @@ class MetricsPage extends Component {
 						monthSelected: true,
 					},
 					view: 'month',
-					filteredIntents: this.setSumDuration(
-						this.filterForDates(state.intents, 'month')
-					),
+					filteredIntents: this.stepFunction(state.intents, 'month'),
 				}));
 				break;
 		}
@@ -316,77 +298,90 @@ class MetricsPage extends Component {
 			viewDropDownStatus,
 			timeDropDownStatus,
 			timeInterval,
+			view,
 		} = this.state;
 		return (
 			<React.Fragment>
 				<div className='metrics-page-container'>
-					{this.getHeaderJSX()}
-					<UncontrolledDropdown>
-						<DropdownToggle caret>Time Interval</DropdownToggle>
-						<DropdownMenu>
-							<DropdownItem
-								disabled={timeDropDownStatus.secondsSelected}
-								onClick={() => {
-									this.handleTimeDropDownClick('seconds');
-								}}
-							>
-								Seconds
-							</DropdownItem>
-							<DropdownItem
-								disabled={timeDropDownStatus.minutesSelected}
-								onClick={() => {
-									this.handleTimeDropDownClick('minutes');
-								}}
-							>
-								Minutes
-							</DropdownItem>
-							<DropdownItem
-								disabled={timeDropDownStatus.hoursSelected}
-								onClick={() => {
-									this.handleTimeDropDownClick('hours');
-								}}
-							>
-								Hours
-							</DropdownItem>
-						</DropdownMenu>
-					</UncontrolledDropdown>
-					<UncontrolledDropdown>
-						<DropdownToggle caret>View</DropdownToggle>
-						<DropdownMenu>
-							<DropdownItem
-								disabled={viewDropDownStatus.daySelected}
+					<Nav tabs className='view-nav'>
+						<NavItem>
+							<NavLink
+								active={view === 'day'}
 								onClick={() => {
 									this.handleViewDropDownClick('day');
 								}}
+								className='pointer'
 							>
 								Day
-							</DropdownItem>
-							<DropdownItem
-								disabled={viewDropDownStatus.weekSelected}
+							</NavLink>
+						</NavItem>
+						<NavItem>
+							<NavLink
+								active={view === 'week'}
 								onClick={() => {
 									this.handleViewDropDownClick('week');
 								}}
+								className='pointer'
 							>
 								Week
-							</DropdownItem>
-							<DropdownItem
-								disabled={viewDropDownStatus.monthSelected}
+							</NavLink>
+						</NavItem>
+						<NavItem>
+							<NavLink
+								active={view === 'month'}
 								onClick={() => {
 									this.handleViewDropDownClick('month');
 								}}
+								className='pointer'
 							>
 								Month
-							</DropdownItem>
-						</DropdownMenu>
-					</UncontrolledDropdown>
-					<div className='pie-chart-container'>
-						<div className='pie-chart-visual-container'>
-							<PieChart intents={filteredIntents} id='pie-chart' />
+							</NavLink>
+						</NavItem>
+					</Nav>
+
+					<div className='visualizations-container'>
+						<div className='pie-chart-container'>
+							<div className='pie-chart-visual-container'>
+								<PieChart intents={filteredIntents} id='pie-chart' />
+							</div>
 						</div>
-					</div>
-					<div className='area-chart-container'>
-						<div className='area-chart-visual-container'>
-							<AreaChart intents={filteredIntents} timeInterval={timeInterval} />
+						<div className='time-dropdown'>
+							<UncontrolledDropdown>
+								<DropdownToggle tag='a' className='nav-link' caret>
+									Displaying in {timeInterval}
+								</DropdownToggle>
+								<DropdownMenu>
+									<DropdownItem
+										disabled={timeDropDownStatus.secondsSelected}
+										onClick={() => {
+											this.handleTimeDropDownClick('seconds');
+										}}
+									>
+										Seconds
+									</DropdownItem>
+									<DropdownItem
+										disabled={timeDropDownStatus.minutesSelected}
+										onClick={() => {
+											this.handleTimeDropDownClick('minutes');
+										}}
+									>
+										Minutes
+									</DropdownItem>
+									<DropdownItem
+										disabled={timeDropDownStatus.hoursSelected}
+										onClick={() => {
+											this.handleTimeDropDownClick('hours');
+										}}
+									>
+										Hours
+									</DropdownItem>
+								</DropdownMenu>
+							</UncontrolledDropdown>
+						</div>
+						<div className='area-chart-container'>
+							<div className='area-chart-visual-container'>
+								<AreaChart intents={filteredIntents} timeInterval={timeInterval} />
+							</div>
 						</div>
 					</div>
 				</div>

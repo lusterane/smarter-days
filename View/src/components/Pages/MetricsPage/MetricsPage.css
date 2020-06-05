@@ -1,5 +1,21 @@
 .metrics-page-container {
-	padding: 5rem;
+	position: relative;
+
+	padding: 3rem;
+	margin: 5rem;
+	border-radius: 15px;
+	background-color: rgb(249, 249, 249);
+}
+
+.view-nav {
+}
+
+.visualizations-container {
+	padding-top: 5vh;
+}
+
+.time-dropdown {
+	width: 0;
 }
 
 .pie-chart-visual-container {

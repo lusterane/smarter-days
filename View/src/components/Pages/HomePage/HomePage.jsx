@@ -146,7 +146,7 @@ class HomePage extends Component {
 	};
 
 	async postUtteranceToDatabase() {
-		console.log('HTTP CALL: getUtteranceHTTP');
+		console.log('HTTP CALL: postUtteranceToDatabase');
 
 		const requestOptions = {
 			method: 'POST',

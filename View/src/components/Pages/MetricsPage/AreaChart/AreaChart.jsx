@@ -8,84 +8,129 @@ class AreaChart extends Component {
 
 		this.state = {
 			propsLoaded: false,
-			series: [
-				{
-					name: 'Exercise',
-					data: [15, 6, 13, 19, 17, 4, 9],
-				},
-				{
-					name: 'Studying',
-					data: [12, 10, 14, 11, 13, 9, 7],
-				},
-				{
-					name: 'Working',
-					data: [6, 2, 15, 8, 3, 1, 7],
-				},
-				{
-					name: 'Eating',
-					data: [15, 20, 18, 4, 3, 17, 12],
-				},
-				{
-					name: 'Resting',
-					data: [2, 7, 12, 17, 3, 16, 8],
-				},
-				{
-					name: 'Sleeping',
-					data: [2, 9, 3, 20, 17, 14, 7],
-				},
-				{
-					name: 'General',
-					data: [11, 7, 12, 18, 20, 15, 2],
-				},
-			],
-			options: {
-				yaxis: {
-					title: {
-						text: 'Duration (Seconds)',
-					},
-				},
-				colors: [
-					'#2E93fA',
-					'#66DA26',
-					'#546E7A',
-					'#E91E63',
-					'#FF9800',
-					'#ADBDFF',
-					'#6B2D5C',
-				],
-				chart: {
-					height: 350,
-					type: 'area',
-				},
-				dataLabels: {
-					enabled: false,
-				},
-				stroke: {
-					curve: 'smooth',
-				},
-				xaxis: {
-					type: 'datetime',
-					categories: [
-						'2020-05-20T01:00:00.000Z',
-						'2020-05-20T02:00:00.000Z',
-						'2020-05-20T03:00:00.000Z',
-						'2020-05-20T04:00:00.000Z',
-						'2020-05-20T05:00:30.000Z',
-						'2020-05-20T06:00:00.000Z',
-						'2020-05-20T07:00:00.000Z',
-					],
-				},
-				tooltip: {
-					x: {
-						format: 'MM/dd/yy HH:mm:ss',
-					},
-				},
-			},
+			// series: [
+			// 	{
+			// 		name: 'Exercise',
+			// 		data: [15, 6, 13, 19, 17, 4, 9],
+			// 	},
+			// 	{
+			// 		name: 'Studying',
+			// 		data: [12, 10, 14, 11, 13, 9, 7],
+			// 	},
+			// 	{
+			// 		name: 'Working',
+			// 		data: [6, 2, 15, 8, 3, 1, 7],
+			// 	},
+			// 	{
+			// 		name: 'Eating',
+			// 		data: [15, 20, 18, 4, 3, 17, 12],
+			// 	},
+			// 	{
+			// 		name: 'Resting',
+			// 		data: [2, 7, 12, 17, 3, 16, 8],
+			// 	},
+			// 	{
+			// 		name: 'Sleeping',
+			// 		data: [2, 9, 3, 20, 17, 14, 7],
+			// 	},
+			// 	{
+			// 		name: 'General',
+			// 		data: [11, 7, 12, 18, 20, 15, 2],
+			// 	},
+			// ],
+			// options: {
+			// 	annotations: {
+			// 		// yaxis: [
+			// 		// 	{
+			// 		// 		y: 30,
+			// 		// 		borderColor: '#999',
+			// 		// 		label: {
+			// 		// 			show: true,
+			// 		// 			text: 'Support',
+			// 		// 			style: {
+			// 		// 				color: '#fff',
+			// 		// 				background: '#00E396',
+			// 		// 			},
+			// 		// 		},
+			// 		// 	},
+			// 		// ],
+			// 		// xaxis: [
+			// 		// 	{
+			// 		// 		x: new Date('14 Nov 2012').getTime(),
+			// 		// 		borderColor: '#999',
+			// 		// 		yAxisIndex: 0,
+			// 		// 		label: {
+			// 		// 			show: true,
+			// 		// 			text: 'Rally',
+			// 		// 			style: {
+			// 		// 				color: '#fff',
+			// 		// 				background: '#775DD0',
+			// 		// 			},
+			// 		// 		},
+			// 		// 	},
+			// 		// ],
+			// 	},
+			// 	yaxis: {
+			// 		title: {
+			// 			text: 'Duration (Seconds)',
+			// 		},
+			// 	},
+			// 	fill: {
+			// 		type: 'gradient',
+			// 		gradient: {
+			// 			shadeIntensity: 1,
+			// 			opacityFrom: 0.7,
+			// 			opacityTo: 0.9,
+			// 			stops: [0, 100],
+			// 		},
+			// 	},
+			// 	colors: [
+			// 		'#2E93fA',
+			// 		'#66DA26',
+			// 		'#546E7A',
+			// 		'#E91E63',
+			// 		'#FF9800',
+			// 		'#ADBDFF',
+			// 		'#6B2D5C',
+			// 	],
+			// 	chart: {
+			// 		id: 'area-datetime',
+			// 		type: 'area',
+			// 		height: 350,
+			// 		zoom: {
+			// 			autoScaleYaxis: true,
+			// 		},
+			// 	},
+			// 	dataLabels: {
+			// 		enabled: false,
+			// 	},
+			// 	stroke: {
+			// 		curve: 'smooth',
+			// 	},
+			// 	xaxis: {
+			// 		type: 'datetime',
+			// 		tickAmount: 1,
+			// 		categories: [
+			// 			'2020-05-20T01:00:00.000Z',
+			// 			'2020-05-20T02:00:00.000Z',
+			// 			'2020-05-20T03:00:00.000Z',
+			// 			'2020-05-20T04:00:00.000Z',
+			// 			'2020-05-20T05:00:30.000Z',
+			// 			'2020-05-20T06:00:00.000Z',
+			// 			'2020-05-20T07:00:00.000Z',
+			// 		],
+			// 	},
+			// 	tooltip: {
+			// 		x: {
+			// 			format: 'MM/dd/yy HH:mm:ss',
+			// 		},
+			// 	},
+			// },
 		};
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		const { intents, timeInterval, view } = this.props;
+		const { intents, timeInterval } = this.props;
 		if (prevProps.intents !== intents) {
 			this.setState({ propsLoaded: true }, this.updateChart(intents));
 			// this.setState({ propsLoaded: true });
@@ -144,20 +189,56 @@ class AreaChart extends Component {
 
 	// ran once when props are recieved
 	updateChart = (intents) => {
-		let series = { ...this.state.series };
-		let options = { ...this.state.options };
-
-		// reset state data points
-		options.xaxis.categories = [];
-		series = [];
+		let series = [];
+		let options = {
+			annotations: {},
+			yaxis: {
+				title: {
+					text: 'Duration (Seconds)',
+				},
+			},
+			fill: {
+				type: 'gradient',
+				gradient: {
+					shadeIntensity: 1,
+					opacityFrom: 0.7,
+					opacityTo: 0.9,
+					stops: [0, 100],
+				},
+			},
+			colors: ['#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800', '#ADBDFF', '#6B2D5C'],
+			chart: {
+				id: 'area-datetime',
+				type: 'area',
+				height: 350,
+				zoom: {
+					autoScaleYaxis: true,
+				},
+			},
+			dataLabels: {
+				enabled: false,
+			},
+			stroke: {
+				curve: 'smooth',
+			},
+			xaxis: {
+				type: 'datetime',
+				tickAmount: 1,
+				categories: [],
+			},
+			tooltip: {
+				x: {
+					format: 'MM/dd/yy HH:mm:ss',
+				},
+			},
+		};
 
 		intents.forEach((intents) => {
-			const buildCategories = []; // dates
 			const buildData = []; // durations
 			const categoryName = intents.category;
 			intents.elements.forEach((element) => {
 				const { date, duration } = element;
-				buildCategories.push(date);
+				options.xaxis.categories.push(date);
 				buildData.push(duration.value);
 			});
 
@@ -165,8 +246,8 @@ class AreaChart extends Component {
 				name: categoryName,
 				data: buildData,
 			});
-			options.xaxis.categories = buildCategories;
 		});
+
 		this.setState({ series: series, options: options });
 	};
 
