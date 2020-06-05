@@ -59,15 +59,31 @@ function stableSort(array, comparator) {
 	return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-	{ id: 'category', numeric: false, disablePadding: true, label: 'Category' },
-	{ id: 'activity', numeric: false, disablePadding: false, label: 'Activity' },
-	{ id: 'hours', numeric: true, disablePadding: false, label: 'Hours' },
-	{ id: 'utterance', numeric: false, disablePadding: false, label: 'Utterance' },
-	{ id: 'date', numeric: true, disablePadding: false, label: 'Date' },
-];
-
 function EnhancedTableHead(props) {
+	const getDurationLabel = () => {
+		switch (props.timeInterval) {
+			case 'seconds':
+				return 'Duration (sec)';
+			case 'minutes':
+				return 'Duration (min)';
+			default:
+				return 'Duration (hr)';
+		}
+	};
+
+	let headCells = [
+		{ id: 'category', numeric: false, disablePadding: true, label: 'Category' },
+		{
+			id: 'activity',
+			numeric: true,
+			disablePadding: false,
+			label: 'Activity',
+		},
+		{ id: 'hours', numeric: true, disablePadding: false, label: getDurationLabel() },
+		{ id: 'utterance', numeric: true, disablePadding: false, label: 'Utterance' },
+		{ id: 'date', numeric: true, disablePadding: false, label: 'Date' },
+	];
+
 	const {
 		classes,
 		onSelectAllClick,
@@ -168,9 +184,10 @@ const EnhancedTableToolbar = (props) => {
 					{numSelected} selected
 				</Typography>
 			) : (
-				<Typography className={classes.title} variant='h6' id='tableTitle' component='div'>
-					Your Log
-				</Typography>
+				''
+				// <Typography className={classes.title} variant='h6' id='tableTitle' component='div'>
+				// 	Your Log
+				// </Typography>
 			)}
 
 			{numSelected > 0 ? (
@@ -229,16 +246,19 @@ export default function EnhancedTable(props) {
 	};
 
 	const getRows = () => {
-		const { intents } = props;
+		const { intents, timeInterval } = props;
 		let ret_arr = [];
 		// Category | Activity | Total Hours | Utterance | Date
 		if (intents) {
 			intents.forEach((intent) => {
 				intent.elements.forEach((element) => {
-					const { action, duration, text, date, _id } = element;
+					const { action, text, date, _id } = element;
 					const { category } = intent;
+
+					const duration = element.durationForms[timeInterval];
+
 					ret_arr.push(
-						createData(category, action, normalizeDate(date), duration.value, text, _id)
+						createData(category, action, normalizeDate(date), duration, text, _id)
 					);
 				});
 			});
@@ -279,7 +299,6 @@ export default function EnhancedTable(props) {
 				selected.slice(selectedIndex + 1)
 			);
 		}
-		console.log(newSelected);
 		setSelected(newSelected);
 	};
 
@@ -312,6 +331,7 @@ export default function EnhancedTable(props) {
 						aria-label='enhanced table'
 					>
 						<EnhancedTableHead
+							timeInterval={props.timeInterval}
 							classes={classes}
 							numSelected={selected.length}
 							order={order}
