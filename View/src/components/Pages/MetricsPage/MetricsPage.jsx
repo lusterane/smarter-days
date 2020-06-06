@@ -43,7 +43,8 @@ class MetricsPage extends Component {
 			.then((res) => res.json({ message: 'Recieved' }))
 			.then(
 				(result) => {
-					let use_result = this.calculateTimeIntervals(result);
+					let use_result = this.normalizeForNoDurationInput(result);
+					use_result = this.calculateTimeIntervals(use_result);
 					use_result = this.normalizeCategoryNames(use_result);
 
 					let filteredIntents = this.stepFunction(use_result);
@@ -75,9 +76,27 @@ class MetricsPage extends Component {
 		let ret_intents = this.sortByDates(intents);
 		ret_intents = this.filterForDates(ret_intents, paramView);
 		ret_intents = this.setSumDuration(ret_intents);
-		ret_intents = this.normalizeDatesToTimezone(ret_intents);
 
 		return ret_intents;
+	};
+
+	normalizeForNoDurationInput = (intents) => {
+		const newIntents = JSON.parse(JSON.stringify(intents));
+		newIntents.forEach((intent) => {
+			intent.elements.forEach((element) => {
+				if (element.fromDateTime !== undefined) {
+					const duration =
+						(new Date(element.toDateTime.value).getTime() -
+							new Date(element.fromDateTime.value).getTime()) /
+						1000; // seconds
+					element.duration.value = duration;
+					element.date = element.fromDateTime.value;
+				}
+			});
+		});
+
+		console.log('newintents', newIntents);
+		return newIntents;
 	};
 
 	setSumDuration = (intents) => {
@@ -162,17 +181,6 @@ class MetricsPage extends Component {
 			// console.log('toDate', toDate);
 		}
 		return filteredIntents;
-	};
-
-	normalizeDatesToTimezone = (result) => {
-		let normalizedResult = JSON.parse(JSON.stringify(result));
-		normalizedResult.forEach((intents) => {
-			intents.elements.forEach((element) => {
-				//element.date = new Date(element.date);
-			});
-		});
-
-		return normalizedResult;
 	};
 
 	normalizeCategoryNames = (result) => {

@@ -8,6 +8,14 @@ const Objects = mongoose.Schema({
 	},
 	date: Date,
 	text: String,
+	fromDateTime: {
+		grain: String,
+		value: Date,
+	},
+	toDateTime: {
+		grain: String,
+		value: Date,
+	},
 });
 
 const IntentSchema = mongoose.Schema({

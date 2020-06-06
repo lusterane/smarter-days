@@ -24,7 +24,6 @@ router.get('/nlp/:utterance', async (req, res) => {
 router.get('/entries', (req, res) => {
 	Intent.find()
 		.then((data) => {
-			console.log(data);
 			res.status(200).json(data);
 		})
 		.catch((err) => {
@@ -33,10 +32,11 @@ router.get('/entries', (req, res) => {
 		});
 });
 
-// WRITES AN ENTRY OF UTTERANCE
+// WRITES AN ENTRY OF UTTERANCE TO DATABASE
 router.post('/entries', (req, res) => {
 	const request = req.body;
-	const { action, category, dateTime, duration, text } = request;
+	console.log('req', request);
+	const { action, category, dateTime, duration, text, fromDateTime, toDateTime } = request;
 	Intent.findOne({ category: category }, (err, intent) => {
 		if (err) {
 			console.log(err);
@@ -52,13 +52,14 @@ router.post('/entries', (req, res) => {
 							duration: duration,
 							date: dateTime,
 							text: text,
+							fromDateTime: fromDateTime,
+							toDateTime: toDateTime,
 						}),
 					},
 				},
 				{ upsert: true }
 			)
 				.then((data) => {
-					console.log(data);
 					res.status(200).json(data);
 				})
 				.catch((err) => {

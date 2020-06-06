@@ -25,6 +25,8 @@ const emptyParsedResult = {
 	action: '',
 	duration: { unit: 'second', value: -1 },
 	dateTime: '',
+	fromDateTime: '',
+	toDateTime: '',
 };
 
 class HomePage extends Component {
@@ -126,20 +128,34 @@ class HomePage extends Component {
 						buildParsedResult.duration.unit = currentElement.normalized.unit;
 						buildParsedResult.duration.value = currentElement.normalized.value;
 					} else if (currentElement.name.includes('wit$datetime')) {
-						buildParsedResult.dateTime = new Date(currentElement.value);
+						buildParsedResult.dateTime =
+							currentElement.value === undefined
+								? new Date()
+								: new Date(currentElement.value);
+						buildParsedResult.fromDateTime = currentElement.from
+							? {
+									grain: currentElement.from.grain,
+									value: currentElement.from.value,
+							  }
+							: '';
+						buildParsedResult.toDateTime = currentElement.to
+							? {
+									grain: currentElement.to.grain,
+									value: currentElement.to.value,
+							  }
+							: '';
 					} else {
 						// everything else
 						buildParsedResult.action = currentElement.value;
 					}
 				}
-
-				// add datetime if not exist
-				if (buildParsedResult.dateTime === '') {
-					buildParsedResult.dateTime = new Date();
-				}
 			});
 		} else {
 			lowConf = true;
+		}
+
+		if (buildParsedResult.dateTime === '') {
+			buildParsedResult.dateTime = new Date();
 		}
 
 		this.setState({ parsedResult: buildParsedResult });
