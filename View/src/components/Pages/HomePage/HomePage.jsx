@@ -50,6 +50,7 @@ class HomePage extends Component {
 		isLoaded: false,
 		cancelModalOpen: false,
 		postDBTimeout: '',
+		confirm: true,
 	};
 
 	handleChange = (e) => {
@@ -89,11 +90,11 @@ class HomePage extends Component {
 							this.state.utterance.intents[0].name
 						);
 						message = (
-							<div className='success-toast-message'>
+							<div>
 								<p>
 									Logging your activity under <b>{category}</b>
 								</p>
-								<div className='cancel-btn-wrapper'>
+								{/* <div className='cancel-btn-wrapper'>
 									<Button
 										outline
 										color='danger'
@@ -102,9 +103,10 @@ class HomePage extends Component {
 									>
 										Cancel
 									</Button>
-								</div>
+								</div> */}
 							</div>
 						);
+						this.postUtteranceToDatabase();
 						this.showToast('success', title, message);
 						// } else {
 						// 	title = 'Oops';
@@ -137,7 +139,6 @@ class HomePage extends Component {
 	}
 
 	normalizeCategoryName = (name) => {
-		console.log(name);
 		switch (name) {
 			case 'log_exercising':
 				return 'EXERCISE';
@@ -243,18 +244,28 @@ class HomePage extends Component {
 					title: title,
 					message: message,
 				},
+				confirm: true,
 			},
 			() => {
 				setTimeout(() => {
 					this.setState(
 						(state, props) => ({
 							toast: { ...state.toast, show: false },
-						}),
-						() => {
-							if (icon === 'success' && !this.state.cancelModalOpen) {
-								this.postUtteranceToDatabase();
-							}
-						}
+						})
+						// () => {
+						// 	if (
+						// 		icon === 'success' &&
+						// 		this.state.confirm &&
+						// 		!this.state.cancelModalOpen
+						// 	) {
+						// 		this.postUtteranceToDatabase();
+						// 		this.showToast(
+						// 			'success',
+						// 			'Logged',
+						// 			'The activity has been logged!'
+						// 		);
+						// 	}
+						// }
 					);
 				}, 3000);
 			}
@@ -262,21 +273,7 @@ class HomePage extends Component {
 	};
 
 	toggleCancelModal = () => {
-		this.setState(
-			(state, props) => ({ cancelModalOpen: !state.cancelModalOpen }),
-			() => {
-				if (!this.state.cancelModalOpen) {
-					this.setState({
-						toast: {
-							show: false,
-							icon: 'warning',
-							title: '-',
-							message: '-',
-						},
-					});
-				}
-			}
-		);
+		this.setState((state, props) => ({ cancelModalOpen: !state.cancelModalOpen }));
 	};
 
 	clearDBPostTimeout = () => {
@@ -305,12 +302,6 @@ class HomePage extends Component {
 								color='secondary'
 								onClick={() => {
 									this.toggleCancelModal();
-									this.postUtteranceToDatabase();
-									this.showToast(
-										'success',
-										'Logged',
-										'The activity has been logged!'
-									);
 								}}
 							>
 								Nevermind
@@ -324,6 +315,9 @@ class HomePage extends Component {
 										'Canceled',
 										'Logging has been canceled'
 									);
+									this.setState({
+										confirm: false,
+									});
 								}}
 							>
 								Don't Log
