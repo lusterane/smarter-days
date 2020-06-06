@@ -1,18 +1,18 @@
 .metrics-page-container {
 	position: relative;
 
-	padding: 3rem;
-	margin: 5rem;
-	border-radius: 15px;
+	padding: 5rem;
+	/* margin: 5rem;
+	border-radius: 15px; */
 	background-color: rgb(249, 249, 249);
 }
 
 .view-nav {
-	font-size: 1.75rem;
+	font-size: 1.25rem;
 }
 
 .time-interval-text {
-	font-size: 1.25rem;
+	font-size: 1rem;
 }
 
 .uncontrolled-dropdown {

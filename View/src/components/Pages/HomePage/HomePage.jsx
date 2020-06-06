@@ -15,6 +15,10 @@ import {
 	UncontrolledPopover,
 	PopoverHeader,
 	PopoverBody,
+	Modal,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
@@ -44,6 +48,8 @@ class HomePage extends Component {
 			message: '-',
 		},
 		isLoaded: false,
+		cancelModalOpen: false,
+		postDBTimeout: '',
 	};
 
 	handleChange = (e) => {
@@ -74,24 +80,42 @@ class HomePage extends Component {
 						utterance: result,
 					});
 					this.parseUtteranceResult(result);
-
 					let message = '-';
 					let title = 'Notice';
 					if (this.validateData()) {
-						const res = this.postUtteranceToDatabase();
-						res.then((res) => {
-							if (res === 200) {
-								message = 'Your activity has been successfuly added!';
-								this.showToast('success', title, message);
-							} else {
-								message =
-									'Sorry, something went wrong on our end. Give us a moment while we try to sort it out';
-								this.showToast('warning', title, message);
-							}
-							console.log('valid utterance');
-						});
+						title = 'Success!';
+						const utterance = this.state.utterance.text;
+						const category = this.normalizeCategoryName(
+							this.state.utterance.intents[0].name
+						);
+						message = (
+							<div className='success-toast-message'>
+								<p>
+									Logging your activity under <b>{category}</b>
+								</p>
+								<div className='cancel-btn-wrapper'>
+									<Button
+										outline
+										color='danger'
+										onClick={this.toggleCancelModal}
+										className='cancel-btn'
+									>
+										Cancel
+									</Button>
+								</div>
+							</div>
+						);
+						this.showToast('success', title, message);
+						// } else {
+						// 	title = 'Oops';
+						// 	message =
+						// 		'Sorry, something went wrong on our end. Give us a moment while we try to sort it out';
+						// 	this.showToast('warning', title, message);
+						// }
+						console.log('valid utterance');
 					} else {
-						message = `Sorry, I don't understand '${this.state.parsedResult.text}'`;
+						title = 'Dang';
+						message = `Sorry, I don't understand that one`;
 						this.showToast('danger', title, message);
 						console.log('invalid utterance');
 					}
@@ -112,6 +136,15 @@ class HomePage extends Component {
 		});
 	}
 
+	normalizeCategoryName = (name) => {
+		console.log(name);
+		switch (name) {
+			case 'log_exercising':
+				return 'EXERCISE';
+			case 'log_working':
+				return 'WORK';
+		}
+	};
 	parseUtteranceResult = (result) => {
 		let buildParsedResult = { ...emptyParsedResult };
 		const { intents, entities, text } = result;
@@ -213,17 +246,90 @@ class HomePage extends Component {
 			},
 			() => {
 				setTimeout(() => {
-					this.setState((state, props) => ({ toast: { ...state.toast, show: false } }));
+					this.setState(
+						(state, props) => ({
+							toast: { ...state.toast, show: false },
+						}),
+						() => {
+							if (icon === 'success' && !this.state.cancelModalOpen) {
+								this.postUtteranceToDatabase();
+							}
+						}
+					);
 				}, 3000);
 			}
 		);
 	};
 
+	toggleCancelModal = () => {
+		this.setState(
+			(state, props) => ({ cancelModalOpen: !state.cancelModalOpen }),
+			() => {
+				if (!this.state.cancelModalOpen) {
+					this.setState({
+						toast: {
+							show: false,
+							icon: 'warning',
+							title: '-',
+							message: '-',
+						},
+					});
+				}
+			}
+		);
+	};
+
+	clearDBPostTimeout = () => {
+		clearTimeout(this.state.postDBTimeout);
+	};
+
 	render() {
-		const { toast, isLoaded } = this.state;
+		const { toast, isLoaded, cancelModalOpen } = this.state;
+		const closeBtn = (
+			<button className='close' onClick={this.toggleCancelModal}>
+				&times;
+			</button>
+		);
 		return (
 			<React.Fragment>
 				<div className='home-page-container'>
+					<Modal isOpen={cancelModalOpen} toggle={this.toggleCancelModal}>
+						<ModalHeader toggle={this.toggleCancelModal} close={closeBtn}>
+							Are you sure?
+						</ModalHeader>
+						<ModalBody>
+							<p>Clicking 'Don't Log' will stop your activity from being logged.</p>
+						</ModalBody>
+						<ModalFooter>
+							<Button
+								color='secondary'
+								onClick={() => {
+									this.toggleCancelModal();
+									this.postUtteranceToDatabase();
+									this.showToast(
+										'success',
+										'Logged',
+										'The activity has been logged!'
+									);
+								}}
+							>
+								Nevermind
+							</Button>{' '}
+							<Button
+								color='danger'
+								onClick={() => {
+									this.toggleCancelModal();
+									this.showToast(
+										'warning',
+										'Canceled',
+										'Logging has been canceled'
+									);
+								}}
+							>
+								Don't Log
+							</Button>
+						</ModalFooter>
+					</Modal>
 					<HeaderText />
 					{isLoaded ? <Spinner className='text-box-spinner' animation='border' /> : ''}
 					<Form className='user-input-form' onSubmit={this.onFormSubmit.bind(this)}>
@@ -265,8 +371,10 @@ class HomePage extends Component {
 
 					{toast.show ? (
 						<Toast className='home-toast'>
-							<ToastHeader icon={toast.icon}>{toast.title}</ToastHeader>
-							<ToastBody>{toast.message}</ToastBody>
+							<div className='toast-text'>
+								<ToastHeader icon={toast.icon}>{toast.title}</ToastHeader>
+								<ToastBody>{toast.message}</ToastBody>
+							</div>
 						</Toast>
 					) : (
 						''

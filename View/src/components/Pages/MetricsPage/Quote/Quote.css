@@ -11,13 +11,14 @@
 	top: -3rem;
 	padding: 3rem;
 	font-size: 1.5rem;
+	width: 85%;
 }
 
 .faQuoteRight,
 .faQuoteLeft {
 	position: absolute;
 
-	opacity: 0.125;
+	opacity: 0.1;
 	font-size: 5rem;
 }
 

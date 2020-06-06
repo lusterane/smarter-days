@@ -23,7 +23,6 @@ class Header extends Component {
 							</Link>
 						</div>
 					</div>
-					<hr></hr>
 				</div>
 			</React.Fragment>
 		);
