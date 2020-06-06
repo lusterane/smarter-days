@@ -1,0 +1,39 @@
+.quote-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 3rem;
+	width: 100%;
+}
+
+.quote {
+	position: relative;
+	top: -3rem;
+	padding: 3rem;
+	font-size: 1.5rem;
+}
+
+.faQuoteRight,
+.faQuoteLeft {
+	position: absolute;
+
+	opacity: 0.125;
+	font-size: 5rem;
+}
+
+.faQuoteRight {
+	bottom: 0rem;
+	right: 0rem;
+}
+
+.faQuoteLeft {
+	top: 0rem;
+	left: 0rem;
+}
+
+.text {
+}
+
+.author {
+	text-align: right;
+}

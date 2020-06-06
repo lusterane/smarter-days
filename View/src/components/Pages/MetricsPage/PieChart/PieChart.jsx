@@ -13,8 +13,7 @@ class PieChart extends Component {
 			series: [44, 55, 13, 23, 22, 13, 7],
 			options: {
 				chart: {
-					width: 380,
-					type: 'pie',
+					type: 'donut',
 				},
 				labels: [
 					'Exercise',
@@ -55,8 +54,7 @@ class PieChart extends Component {
 		// reset state data points
 		let options = {
 			chart: {
-				width: 380,
-				type: 'pie',
+				type: 'donut',
 			},
 			labels: [],
 			responsive: [
@@ -87,11 +85,11 @@ class PieChart extends Component {
 	render() {
 		const { updatedFromProps } = this.state;
 		return updatedFromProps ? (
-			<div id='chart'>
+			<div id='chart' className='pie-chart'>
 				<ReactApexChart
 					options={this.state.options}
 					series={this.state.series}
-					type='pie'
+					type='donut'
 					width={380}
 				/>
 			</div>

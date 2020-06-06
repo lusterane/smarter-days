@@ -8,11 +8,19 @@ import {
 	DropdownToggle,
 	DropdownMenu,
 	NavLink,
+	Card,
+	Button,
+	CardTitle,
+	CardText,
 } from 'reactstrap';
 
 import PieChart from './PieChart/PieChart';
 import AreaChart from './AreaChart/AreaChart';
 import Table from './Table/Table';
+import Quote from './Quote/Quote';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 
 import './MetricsPage.css';
 
@@ -95,7 +103,6 @@ class MetricsPage extends Component {
 			});
 		});
 
-		console.log('newintents', newIntents);
 		return newIntents;
 	};
 
@@ -347,52 +354,65 @@ class MetricsPage extends Component {
 							</NavLink>
 						</NavItem>
 					</Nav>
-
+					<UncontrolledDropdown className='uncontrolled-dropdown'>
+						<DropdownToggle tag='a'>
+							<span className='time-interval-text remove-dec pointer'>
+								<FontAwesomeIcon icon={faAngleDoubleRight} /> Your {view} in{' '}
+								{timeInterval} <FontAwesomeIcon icon={faCaretDown} />
+							</span>
+						</DropdownToggle>
+						<DropdownMenu>
+							<DropdownItem
+								disabled={timeDropDownStatus.secondsSelected}
+								onClick={() => {
+									this.handleTimeDropDownClick('seconds');
+								}}
+							>
+								Seconds
+							</DropdownItem>
+							<DropdownItem
+								disabled={timeDropDownStatus.minutesSelected}
+								onClick={() => {
+									this.handleTimeDropDownClick('minutes');
+								}}
+							>
+								Minutes
+							</DropdownItem>
+							<DropdownItem
+								disabled={timeDropDownStatus.hoursSelected}
+								onClick={() => {
+									this.handleTimeDropDownClick('hours');
+								}}
+							>
+								Hours
+							</DropdownItem>
+						</DropdownMenu>
+					</UncontrolledDropdown>
 					<div className='visualizations-container'>
-						<div className='pie-chart-container'>
-							<div className='pie-chart-visual-container'>
-								<PieChart intents={filteredIntents} id='pie-chart' />
+						<div className='top-container'>
+							<div className='pie-chart-container'>
+								<div className='pie-chart-visual-container'>
+									<Card body className='pie-chart-card'>
+										<PieChart intents={filteredIntents} id='pie-chart' />
+									</Card>
+								</div>
 							</div>
-						</div>
-						<div className='time-dropdown'>
-							<UncontrolledDropdown>
-								<DropdownToggle tag='a' className='nav-link' caret>
-									Displaying in {timeInterval}
-								</DropdownToggle>
-								<DropdownMenu>
-									<DropdownItem
-										disabled={timeDropDownStatus.secondsSelected}
-										onClick={() => {
-											this.handleTimeDropDownClick('seconds');
-										}}
-									>
-										Seconds
-									</DropdownItem>
-									<DropdownItem
-										disabled={timeDropDownStatus.minutesSelected}
-										onClick={() => {
-											this.handleTimeDropDownClick('minutes');
-										}}
-									>
-										Minutes
-									</DropdownItem>
-									<DropdownItem
-										disabled={timeDropDownStatus.hoursSelected}
-										onClick={() => {
-											this.handleTimeDropDownClick('hours');
-										}}
-									>
-										Hours
-									</DropdownItem>
-								</DropdownMenu>
-							</UncontrolledDropdown>
+							<Quote />
 						</div>
 						<div className='area-chart-container'>
 							<div className='area-chart-visual-container'>
-								<AreaChart intents={filteredIntents} timeInterval={timeInterval} />
+								<Card body>
+									<AreaChart
+										intents={filteredIntents}
+										timeInterval={timeInterval}
+									/>
+								</Card>
 							</div>
 						</div>
-						<Table intents={filteredIntents} timeInterval={timeInterval} />
+
+						<div className='table-container'>
+							<Table intents={filteredIntents} timeInterval={timeInterval} />
+						</div>
 					</div>
 				</div>
 			</React.Fragment>

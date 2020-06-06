@@ -21,6 +21,8 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
+import './Table.css';
+
 function createData(category, activity, date, hours, utterance) {
 	return { category, activity, hours, utterance, date };
 }
@@ -325,7 +327,7 @@ export default function EnhancedTable(props) {
 				<EnhancedTableToolbar numSelected={selected.length} />
 				<TableContainer>
 					<Table
-						className={classes.table}
+						className={classes.table + ' table'}
 						aria-labelledby='tableTitle'
 						size={dense ? 'small' : 'medium'}
 						aria-label='enhanced table'
@@ -396,10 +398,6 @@ export default function EnhancedTable(props) {
 					onChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			</Paper>
-			<FormControlLabel
-				control={<Switch checked={dense} onChange={handleChangeDense} />}
-				label='Dense padding'
-			/>
 		</div>
 	);
 }

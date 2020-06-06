@@ -8,27 +8,45 @@
 }
 
 .view-nav {
+	font-size: 1.75rem;
+}
+
+.time-interval-text {
+	font-size: 1.25rem;
+}
+
+.uncontrolled-dropdown {
+	padding-top: 4rem;
 }
 
 .visualizations-container {
 	padding-top: 5vh;
 }
 
-.time-dropdown {
-	width: 0;
-}
-
 .pie-chart-visual-container {
 	display: flex;
 	justify-content: center;
+}
 
-	margin: 1rem;
+.pie-chart-card {
+	min-width: 25rem !important;
+	max-width: 25rem;
+}
+
+.top-container {
+	display: flex;
+	justify-content: flex-start;
 }
 
 .today-container .header,
 .month-container .header {
 	display: flex;
 	padding-bottom: 2rem;
+}
+
+.pie-chart-container,
+.area-chart-container {
+	padding-bottom: 3rem;
 }
 
 .pie-chart-container .header h1,

@@ -12,6 +12,9 @@ import {
 	ToastBody,
 	ToastHeader,
 	Spinner,
+	UncontrolledPopover,
+	PopoverHeader,
+	PopoverBody,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
@@ -31,7 +34,7 @@ const emptyParsedResult = {
 
 class HomePage extends Component {
 	state = {
-		userInput: 'I went on a 20 minute run',
+		userInput: '',
 		utterance: {},
 		parsedResult: emptyParsedResult,
 		toast: {
@@ -238,8 +241,25 @@ class HomePage extends Component {
 							</div>
 						</FormGroup>
 						<div id='or-text'>or</div>
+						<UncontrolledPopover placement='bottom' trigger='hover' target='microphone'>
+							<PopoverBody>
+								<div className='popover-body'>
+									<h2>Privacy</h2>
+									<p>
+										We do not sell or distribute user data. Recording starts and
+										stops at your request.
+									</p>
+								</div>
+							</PopoverBody>
+						</UncontrolledPopover>
 						<div className='microphone-container'>
-							<FontAwesomeIcon icon={faMicrophone} size='2x' className='pointer' />
+							<div className='remove-dec wrapper' id='microphone'>
+								<FontAwesomeIcon
+									icon={faMicrophone}
+									size='2x'
+									className='pointer'
+								/>
+							</div>
 						</div>
 					</Form>
 

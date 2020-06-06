@@ -36,6 +36,10 @@
 	padding-top: 5vh;
 }
 
+.microphone-container .wrapper {
+	padding: 1rem;
+}
+
 .home-toast {
 	position: fixed;
 	bottom: 4vh;
