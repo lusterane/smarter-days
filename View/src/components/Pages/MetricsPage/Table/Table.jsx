@@ -23,8 +23,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 
 import './Table.css';
 
-function createData(category, activity, date, hours, utterance) {
-	return { category, activity, hours, utterance, date };
+function createData(category, activity, hours, utterance, date, _id) {
+	return { category, activity, hours, utterance, date, _id };
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -260,7 +260,7 @@ export default function EnhancedTable(props) {
 					const duration = element.durationForms[timeInterval];
 
 					ret_arr.push(
-						createData(category, action, normalizeDate(date), duration, text, _id)
+						createData(category, action, duration, text, normalizeDate(date), _id)
 					);
 				});
 			});
@@ -346,17 +346,16 @@ export default function EnhancedTable(props) {
 							{stableSort(data_row, getComparator(order, orderBy))
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((row, index) => {
-									const isItemSelected = isSelected(row.category);
+									const isItemSelected = isSelected(row._id);
 									const labelId = `enhanced-table-checkbox-${index}`;
-
 									return (
 										<TableRow
 											hover
-											onClick={(event) => handleClick(event, row.category)}
+											onClick={(event) => handleClick(event, row._id)}
 											role='checkbox'
 											aria-checked={isItemSelected}
 											tabIndex={-1}
-											key={index}
+											key={row._id}
 											selected={isItemSelected}
 										>
 											<TableCell padding='checkbox'>
