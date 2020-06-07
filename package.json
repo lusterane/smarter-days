@@ -4,8 +4,8 @@
 	"description": "REST API for NLP app",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon app.js",
-		"dev": "concurrently \"npm start\" \"npm run dev --prefix ./View\""
+		"start": "node app.js",
+		"dev": "concurrently \"nodemon app.js\" \"npm run dev --prefix ./View\""
 	},
 	"repository": {
 		"type": "git",
