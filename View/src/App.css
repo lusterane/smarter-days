@@ -15,7 +15,8 @@ body {
 }
 
 .disable {
-	color: rgb(160, 159, 159);
+	opacity: 0.3;
+	z-index: -1;
 }
 
 .remove-dec {

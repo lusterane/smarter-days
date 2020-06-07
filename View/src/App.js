@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Header from './components/Shared/Header/Header';
 import HomePage from './components/Pages/HomePage/HomePage';
@@ -16,10 +16,10 @@ class App extends Component {
 					<Router>
 						<Header />
 						<Switch>
-							<Route exact path='/'>
+							<Route exact path={process.env.PUBLIC_URL + '/'}>
 								<HomePage />
 							</Route>
-							<Route path='/metrics'>
+							<Route path={process.env.PUBLIC_URL + '/metrics'}>
 								<MetricsPage />
 							</Route>
 						</Switch>

@@ -9,9 +9,6 @@ import {
 	DropdownMenu,
 	NavLink,
 	Card,
-	Button,
-	CardTitle,
-	CardText,
 } from 'reactstrap';
 
 import PieChart from './PieChart/PieChart';
@@ -43,10 +40,6 @@ class MetricsPage extends Component {
 	async getIntentsFromDB() {
 		console.log('HTTP CALL: getIntentsFromDB');
 
-		const requestOptions = {
-			method: 'GET',
-			headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-		};
 		const response = await fetch('http://localhost:5000/utterance/entries/')
 			.then((res) => res.json({ message: 'Recieved' }))
 			.then(
@@ -256,7 +249,7 @@ class MetricsPage extends Component {
 					timeInterval: 'minutes',
 				});
 				break;
-			case 'hours':
+			default:
 				this.setState({
 					timeDropDownStatus: {
 						secondsSelected: false,
@@ -309,13 +302,7 @@ class MetricsPage extends Component {
 	};
 
 	render() {
-		const {
-			filteredIntents,
-			viewDropDownStatus,
-			timeDropDownStatus,
-			timeInterval,
-			view,
-		} = this.state;
+		const { filteredIntents, timeDropDownStatus, timeInterval, view } = this.state;
 		return (
 			<React.Fragment>
 				<div className='metrics-page-container'>
@@ -368,7 +355,7 @@ class MetricsPage extends Component {
 									this.handleTimeDropDownClick('seconds');
 								}}
 							>
-								Seconds
+								seconds
 							</DropdownItem>
 							<DropdownItem
 								disabled={timeDropDownStatus.minutesSelected}
@@ -376,7 +363,7 @@ class MetricsPage extends Component {
 									this.handleTimeDropDownClick('minutes');
 								}}
 							>
-								Minutes
+								minutes
 							</DropdownItem>
 							<DropdownItem
 								disabled={timeDropDownStatus.hoursSelected}
@@ -384,7 +371,7 @@ class MetricsPage extends Component {
 									this.handleTimeDropDownClick('hours');
 								}}
 							>
-								Hours
+								hours
 							</DropdownItem>
 						</DropdownMenu>
 					</UncontrolledDropdown>

@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 
 import {
-	Col,
 	Button,
 	Form,
 	FormGroup,
-	Label,
 	Input,
-	FormText,
 	Toast,
 	ToastBody,
 	ToastHeader,
 	Spinner,
 	UncontrolledPopover,
-	PopoverHeader,
 	PopoverBody,
 	Modal,
 	ModalHeader,
@@ -85,7 +81,6 @@ class HomePage extends Component {
 					let title = 'Notice';
 					if (this.validateData()) {
 						title = 'Success!';
-						const utterance = this.state.utterance.text;
 						const category = this.normalizeCategoryName(
 							this.state.utterance.intents[0].name
 						);
@@ -142,7 +137,7 @@ class HomePage extends Component {
 		switch (name) {
 			case 'log_exercising':
 				return 'EXERCISE';
-			case 'log_working':
+			default:
 				return 'WORK';
 		}
 	};

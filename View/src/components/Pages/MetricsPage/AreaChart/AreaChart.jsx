@@ -152,7 +152,7 @@ class AreaChart extends Component {
 			case 'minutes':
 				yAxisName = 'Duration (Minutes)';
 				break;
-			case 'hours':
+			default:
 				yAxisName = 'Duration (Hours)';
 				break;
 		}
@@ -174,9 +174,12 @@ class AreaChart extends Component {
 						return seconds;
 					case 'minutes':
 						return minutes;
-					case 'hours':
+					default:
 						return hours;
 				}
+
+				// default
+				// return hours;
 			});
 
 			return {

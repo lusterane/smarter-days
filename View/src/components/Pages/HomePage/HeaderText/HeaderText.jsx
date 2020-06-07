@@ -11,9 +11,9 @@ class HeaderText extends Component {
 				<div className='header-text-container'>
 					<div className='title'>
 						<Link className='link-option remove-dec' to='/'>
-							<h1>Days</h1>
+							<h1>smarter days</h1>
 						</Link>
-						<span>Take control of your life</span>
+						<span>take control of your life</span>
 					</div>
 				</div>
 			</React.Fragment>

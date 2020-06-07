@@ -16,10 +16,7 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 
 import './Table.css';
 
@@ -239,7 +236,6 @@ export default function EnhancedTable(props) {
 	const [orderBy, setOrderBy] = React.useState('hours');
 	const [selected, setSelected] = React.useState([]);
 	const [page, setPage] = React.useState(0);
-	const [dense, setDense] = React.useState(false);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
 	const normalizeDate = (date) => {
@@ -313,10 +309,6 @@ export default function EnhancedTable(props) {
 		setPage(0);
 	};
 
-	const handleChangeDense = (event) => {
-		setDense(event.target.checked);
-	};
-
 	const isSelected = (name) => selected.indexOf(name) !== -1;
 
 	const emptyRows = rowsPerPage - Math.min(rowsPerPage, data_row.length - page * rowsPerPage);
@@ -329,7 +321,7 @@ export default function EnhancedTable(props) {
 					<Table
 						className={classes.table + ' table'}
 						aria-labelledby='tableTitle'
-						size={dense ? 'small' : 'medium'}
+						size={'medium'}
 						aria-label='enhanced table'
 					>
 						<EnhancedTableHead
@@ -380,7 +372,7 @@ export default function EnhancedTable(props) {
 									);
 								})}
 							{emptyRows > 0 && (
-								<TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+								<TableRow style={{ height: 53 * emptyRows }}>
 									<TableCell colSpan={6} />
 								</TableRow>
 							)}

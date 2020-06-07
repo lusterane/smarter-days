@@ -12,14 +12,14 @@ class Header extends Component {
 				<div className='header-container'>
 					<div className='navbar'>
 						<Link className='navbar-name link-option remove-dec' to='/'>
-							Days
+							smarter days
 						</Link>
 						<div className='links'>
 							<Link className='link-option remove-dec' to='/'>
-								Home
+								home
 							</Link>
 							<Link className='link-option remove-dec' to='/metrics'>
-								Metrics
+								metrics
 							</Link>
 						</div>
 					</div>
