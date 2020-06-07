@@ -17,6 +17,8 @@
 	display: flex;
 	justify-content: center;
 	text-align: center;
+
+	position: relative;
 }
 
 #submission-button {
@@ -31,9 +33,10 @@
 }
 
 .microphone-container {
-	display: flex;
-	justify-content: center;
-	padding-top: 5vh;
+	position: absolute;
+	right: 0.5rem;
+	top: 0.32rem;
+	font-size: 0.8rem;
 }
 
 .microphone-container .wrapper {

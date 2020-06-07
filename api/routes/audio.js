@@ -20,21 +20,20 @@ const fetch = require('node-fetch');
 // });
 
 // sends audio to wit.ai and gets resposne
-// not working right now
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
 	try {
-		//const dataBinary = encodeURIComponent('I ran for 2 minutes');
+		const data = req.body;
 		const uri = 'https://api.wit.ai/speech?v=20200513';
 
+		console.log('wav', data.wav);
 		const response = await fetch(uri, {
 			headers: {
 				Authorization: 'Bearer ' + process.env.CLIENT_TOKEN,
 				'Content-Type': 'audio/wav',
+				'--data-binary': data.wav,
 			},
 		});
 		const json = await response.json();
-
-		console.log(json);
 		res.status(200).json(json);
 	} catch (error) {
 		console.log(error);

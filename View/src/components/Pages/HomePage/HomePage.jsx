@@ -20,9 +20,9 @@ import {
 	ModalBody,
 	ModalFooter,
 } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
+
 import HeaderText from './HeaderText/HeaderText';
+import Audio from './Audio/Audio';
 
 import './HomePage.css';
 
@@ -338,9 +338,11 @@ class HomePage extends Component {
 									value={this.state.userInput}
 									placeholder='Try this, "I spent 4 hours emailing coworkers for work"'
 								/>
+								<div className='microphone-container'>
+									<Audio />
+								</div>
 							</div>
 						</FormGroup>
-						<div id='or-text'>or</div>
 						<UncontrolledPopover placement='bottom' trigger='hover' target='microphone'>
 							<PopoverBody>
 								<div className='popover-body'>
@@ -352,15 +354,6 @@ class HomePage extends Component {
 								</div>
 							</PopoverBody>
 						</UncontrolledPopover>
-						<div className='microphone-container'>
-							<div className='remove-dec wrapper' id='microphone'>
-								<FontAwesomeIcon
-									icon={faMicrophone}
-									size='2x'
-									className='pointer'
-								/>
-							</div>
-						</div>
 					</Form>
 
 					{toast.show ? (
