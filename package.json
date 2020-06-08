@@ -4,7 +4,7 @@
 	"description": "REST API for NLP app",
 	"main": "index.js",
 	"scripts": {
-		"start": "node app.js",
+		"server": "node app.js",
 		"dev": "concurrently \"nodemon app.js\" \"npm run dev --prefix ./View\""
 	},
 	"repository": {
