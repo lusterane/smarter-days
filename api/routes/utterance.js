@@ -10,7 +10,7 @@ router.get('/nlp/:utterance', async (req, res) => {
 		const uri =
 			'https://api.wit.ai/message?v=20200513&q=' + encodeURIComponent(req.params.utterance);
 		const response = await fetch(uri, {
-			headers: { Authorization: 'Bearer ' + process.env.CLIENT_TOKEN },
+			headers: { Authorization: 'Bearer ' + process.env.SERVER_TOKEN },
 		});
 		const json = await response.json();
 		res.status(200).json(json);

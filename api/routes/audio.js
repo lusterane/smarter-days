@@ -7,7 +7,7 @@ const fetch = require('node-fetch');
 // 	try {
 // 		const q = encodeURIComponent('I ran for 2 minutes');
 // 		const uri = 'https://api.wit.ai/message?v=20200513&q=' + q;
-// 		const auth = 'Bearer ' + process.env.CLIENT_TOKEN;
+// 		const auth = 'Bearer ' + process.env.SERVER_TOKEN;
 // 		const response = await fetch(uri, { headers: { Authorization: auth } });
 // 		const json = await response.json();
 
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
 		console.log('wav', data.wav);
 		const response = await fetch(uri, {
 			headers: {
-				Authorization: 'Bearer ' + process.env.CLIENT_TOKEN,
+				Authorization: 'Bearer ' + process.env.SERVER_TOKEN,
 				'Content-Type': 'audio/wav',
 				'--data-binary': data.wav,
 			},
