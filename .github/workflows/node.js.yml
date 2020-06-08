@@ -23,7 +23,7 @@ jobs:
             - name: Install and Build 🔧
               run: |
                   npm install --prefix ./View
-                  npm run-script build --prefix ./View
+                  CI=false npm run-script build --prefix ./View
             - name: Deploy to Firebase 🔥
               uses: lowply/deploy-firebase@v0.0.2
               env:
