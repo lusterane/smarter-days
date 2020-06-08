@@ -149,8 +149,9 @@ class MetricsPage extends Component {
 			// console.log('fromdate', fromDate);
 			// console.log('toDate', toDate);
 		} else if (view === 'week') {
-			let fromDate = new Date(nowDate.setDate(nowDate.getDate() - nowDate.getDay() + 1));
-			let toDate = new Date(nowDate.setDate(nowDate.getDate() - nowDate.getDay() + 7));
+			let fromDate = new Date(nowDate.setDate(nowDate.getDate() - nowDate.getDay()));
+			let toDate = new Date(nowDate.setDate(nowDate.getDate() - nowDate.getDay() + 6));
+
 			fromDate.setHours(0, 0, 0, 0);
 			toDate.setHours(23, 59, 59, 999);
 			filteredIntents.forEach((intent) => {
