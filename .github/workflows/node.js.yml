@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [12.x]
 
     steps:
     - name: Checkout 🛎️
@@ -25,6 +25,5 @@ jobs:
       run: |
           npm install --prefix ./View
           npm run-script build --prefix ./View
-    - name: Deploy 🔥
-      run: 
-          npm run-script deploy --prefix ./View
+    - name: Deploy to Firebase 🔥
+      uses: lowply/deploy-firebase@v0.0.2
