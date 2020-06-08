@@ -40,7 +40,8 @@ class MetricsPage extends Component {
 	async getIntentsFromDB() {
 		console.log('HTTP CALL: getIntentsFromDB');
 
-		const response = await fetch(process.env.REACT_APP_API_ENDPOINT + `/utterance/entries/`)
+		const endpoint = process.env.REACT_APP_API_ENDPOINT || 'http://localhost:5000';
+		const response = await fetch(endpoint + `/utterance/entries/`)
 			.then((res) => res.json({ message: 'Recieved' }))
 			.then(
 				(result) => {

@@ -69,9 +69,8 @@ class HomePage extends Component {
 	async getUtteranceHTTP() {
 		console.log('HTTP CALL: getUtteranceHTTP');
 		this.toggledIsLoaded();
-		const response = fetch(
-			process.env.REACT_APP_API_ENDPOINT + `/utterance/nlp/` + this.state.userInput
-		)
+		const endpoint = process.env.REACT_APP_API_ENDPOINT || 'http://localhost:5000';
+		const response = fetch(endpoint + `/utterance/nlp/` + this.state.userInput)
 			.then((res) => res.json({ message: 'Recieved' }))
 			.then(
 				(result) => {
@@ -203,10 +202,9 @@ class HomePage extends Component {
 			headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
 			body: JSON.stringify(this.state.parsedResult),
 		};
-		const response = await fetch(
-			process.env.REACT_APP_API_ENDPOINT + `/utterance/entries/`,
-			requestOptions
-		).then(
+
+		const endpoint = process.env.REACT_APP_API_ENDPOINT || 'http://localhost:5000';
+		const response = await fetch(endpoint + `/utterance/entries/`, requestOptions).then(
 			(result) => {
 				return result.status;
 			},

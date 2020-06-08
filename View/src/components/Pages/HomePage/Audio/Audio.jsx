@@ -18,7 +18,8 @@ class Audio extends Component {
 	async getAudioUtterance(wav) {
 		console.log('HTTP CALL: getAudioUtterance');
 
-		const response = await fetch(process.env.REACT_APP_API_ENDPOINT + `/audio/`, {
+		const endpoint = process.env.REACT_APP_API_ENDPOINT || 'http://localhost:5000';
+		const response = await fetch(endpoint + `/audio/`, {
 			method: 'POST',
 			responseType: 'blob',
 			headers: { 'Content-Type': 'application/json' },
