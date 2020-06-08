@@ -24,7 +24,7 @@
 	"scripts": {
 		"start": "REACT_APP_API_ENDPOINT=https://smarter-days.herokuapp.com react-scripts start",
 		"dev": "react-scripts start",
-		"build": "react-scripts build",
+		"build": "REACT_APP_API_ENDPOINT=https://smarter-days.herokuapp.com react-scripts build",
 		"deploy": "firebase deploy",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"
