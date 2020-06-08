@@ -29,7 +29,10 @@ jobs:
                   npm install
                   CI=false npm run-script build
             - name: Deploy to Firebase 🔥
-              uses: lowply/deploy-firebase@v0.0.2
+              uses: w9jds/firebase-action@master
+              with:
+                  args: deploy --only hosting
               env:
                   FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+                  PROJECT_PATH: ./View
                   FIREBASE_PROJECT: smarter-days
