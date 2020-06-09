@@ -43,6 +43,11 @@ class HomePage extends Component {
 			title: '-',
 			message: '-',
 		},
+		sampleText: [
+			'I called Mike for work for 10 hours',
+			'I did calisthenics for 3 hours on September 25, 2020',
+			'I ran from 2pm to 4pm at Menlo Park.',
+		],
 		isLoaded: false,
 		cancelModalOpen: false,
 		postDBTimeout: '',
@@ -53,12 +58,30 @@ class HomePage extends Component {
 		this.setState({ [e.target.name]: e.target.value });
 	};
 
-	onFormSubmit = (e) => {
-		e.preventDefault();
-		if (this.state.userInput !== '') {
-			this.getUtteranceHTTP();
+	handleLoadSample = () => {
+		const { sampleText, userInput } = this.state;
+		const min = 0;
+		const max = sampleText.length - 1;
+		let samePrev = true;
+		while (samePrev) {
+			const randIndex = Math.floor(Math.random() * (max - min + 1)) + min;
+			const newText = sampleText[randIndex];
+			if (newText !== userInput) {
+				this.setState({ userInput: newText });
+				samePrev = false;
+			}
 		}
 	};
+
+	async onFormSubmit(e) {
+		e.preventDefault();
+		if (this.state.userInput !== '') {
+			const response = await this.getUtteranceHTTP();
+			if (response === 200) {
+				this.setState({ userInput: '' });
+			}
+		}
+	}
 
 	toggledIsLoaded = () => {
 		this.setState((state, props) => ({
@@ -104,18 +127,14 @@ class HomePage extends Component {
 						);
 						this.postUtteranceToDatabase();
 						this.showToast('success', title, message);
-						// } else {
-						// 	title = 'Oops';
-						// 	message =
-						// 		'Sorry, something went wrong on our end. Give us a moment while we try to sort it out';
-						// 	this.showToast('warning', title, message);
-						// }
 						console.log('valid utterance');
+						return 200;
 					} else {
 						title = 'Dang';
 						message = `Sorry, I don't understand that one`;
 						this.showToast('danger', title, message);
 						console.log('invalid utterance');
+						return 500;
 					}
 				},
 				// Note: it's important to handle errors here
@@ -126,12 +145,14 @@ class HomePage extends Component {
 					this.setState({
 						error,
 					});
+					return 500;
 				}
 			);
 
 		response.then(() => {
 			this.toggledIsLoaded();
 		});
+		return await response;
 	}
 
 	normalizeCategoryName = (name) => {
@@ -322,7 +343,7 @@ class HomePage extends Component {
 					<HeaderText />
 					{isLoaded ? <Spinner className='text-box-spinner' animation='border' /> : ''}
 					<Form className='user-input-form' onSubmit={this.onFormSubmit.bind(this)}>
-						<FormGroup row>
+						<FormGroup row className='form-group'>
 							<div className='user-input-row-wrapper'>
 								<Input
 									className='user-input-box'
@@ -337,8 +358,14 @@ class HomePage extends Component {
 									<Audio />
 								</div>
 							</div>
+
+							<div className='submit-btn-container'>
+								<Button outline color='secondary' submit='true'>
+									Log activity
+								</Button>
+							</div>
 						</FormGroup>
-						<UncontrolledPopover placement='bottom' trigger='hover' target='microphone'>
+						<UncontrolledPopover placement='right' trigger='hover' target='microphone'>
 							<PopoverBody>
 								<div className='popover-body'>
 									<h2>Privacy</h2>
@@ -349,6 +376,13 @@ class HomePage extends Component {
 								</div>
 							</PopoverBody>
 						</UncontrolledPopover>
+						<div className='random-activity-text'>
+							Don't know what to say? Try a random&nbsp;
+							<span className='link' onClick={this.handleLoadSample}>
+								phrase
+							</span>
+							.
+						</div>
 					</Form>
 
 					{toast.show ? (

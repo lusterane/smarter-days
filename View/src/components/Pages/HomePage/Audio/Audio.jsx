@@ -47,7 +47,6 @@ class Audio extends Component {
 					<FontAwesomeIcon
 						icon={faMicrophone}
 						size='2x'
-						id='microhpone'
 						className='disable'
 						onClick={this.handleMicrophoneClick}
 					/>

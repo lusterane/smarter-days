@@ -11,6 +11,9 @@
 
 .user-input-box {
 	width: 50vw !important;
+	padding: 1.3rem 1.5rem !important;
+	border-radius: 30px !important;
+	box-shadow: 4px 4px 35px 3px rgba(0, 0, 0, 0.1);
 }
 
 .user-input-row-wrapper {
@@ -34,9 +37,15 @@
 
 .microphone-container {
 	position: absolute;
-	right: 0.5rem;
-	top: 0.32rem;
-	font-size: 0.8rem;
+	right: 1rem;
+	top: 0.5rem;
+	font-size: 0.75rem;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .microphone-container .wrapper {
@@ -74,4 +83,25 @@
 	top: 2rem;
 	right: 7rem;
 	margin: 1rem 0;
+}
+
+.submit-btn-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.submit-btn-container .btn {
+	border-radius: 0px;
+	padding: 0.5rem 1rem;
+	margin-top: 1.5rem;
+}
+.submit-btn-container .btn:hover {
+}
+
+.random-activity-text {
+	display: flex;
+	justify-content: center;
+	padding-top: 7rem;
 }
