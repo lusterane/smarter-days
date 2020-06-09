@@ -28,3 +28,14 @@ body {
 	text-decoration: underline;
 	color: black;
 }
+
+.link {
+	cursor: pointer;
+	color: #007bff;
+	text-decoration: none;
+	background-color: transparent;
+}
+
+.link:hover {
+	text-decoration: underline;
+}
