@@ -14,7 +14,7 @@ Our solution is a productivity web application we call [smarter days](https://sm
 
 ## How?
 
-We have been training a NLP model to understand phrases for a . Users will enter/say their activities throughout the day and the web app will provide metrics for the users.
+We have been training a NLP model to understand phrases that align with a broad range of activities. Users will enter/say their activities throughout the day and the web app will provide metrics for the users.
 
 Also, I have been developing the full-stack web application that users will interface our model with.
 
