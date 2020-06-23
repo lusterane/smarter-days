@@ -12,6 +12,15 @@ class PieChart extends Component {
 			updatedFromProps: false,
 			series: [44, 55, 13, 23, 22, 13, 7],
 			options: {
+				colors: [
+					'#2E93fA',
+					'#66DA26',
+					'#546E7A',
+					'#E91E63',
+					'#FF9800',
+					'#ADBDFF',
+					'#6B2D5C',
+				],
 				chart: {
 					type: 'donut',
 				},

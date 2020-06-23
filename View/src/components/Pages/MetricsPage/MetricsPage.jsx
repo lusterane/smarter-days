@@ -195,8 +195,15 @@ class MetricsPage extends Component {
 				case 'log_working':
 					element.category = 'Work';
 					break;
+				case 'log_studying':
+					element.category = 'Study';
+					break;
+				case 'log_resting':
+					element.category = 'Rest';
+					break;
 				default:
 					element.category = '-';
+					break;
 			}
 
 			return element;

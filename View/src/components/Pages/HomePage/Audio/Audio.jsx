@@ -40,15 +40,14 @@ class Audio extends Component {
 	};
 
 	render() {
-		const { wav } = this.state;
 		return (
 			<React.Fragment>
 				<div className='' id='microphone'>
 					<FontAwesomeIcon
 						icon={faMicrophone}
 						size='2x'
-						className='disable'
-						onClick={this.handleMicrophoneClick}
+						className='audio-btn disable pointer'
+						onClick={this.props.handleMicrophoneClick}
 					/>
 				</div>
 			</React.Fragment>

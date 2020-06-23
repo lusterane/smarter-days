@@ -209,7 +209,6 @@ class AreaChart extends Component {
 					stops: [0, 100],
 				},
 			},
-			colors: ['#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800', '#ADBDFF', '#6B2D5C'],
 			chart: {
 				id: 'area-datetime',
 				type: 'area',

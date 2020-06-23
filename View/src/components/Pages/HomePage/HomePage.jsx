@@ -15,6 +15,8 @@ import {
 	ModalHeader,
 	ModalBody,
 	ModalFooter,
+	Progress,
+	Alert,
 } from 'reactstrap';
 
 import HeaderText from './HeaderText/HeaderText';
@@ -50,6 +52,8 @@ class HomePage extends Component {
 		],
 		isLoaded: false,
 		cancelModalOpen: false,
+		audioModalOpen: false,
+		uploadModalOpen: false,
 		postDBTimeout: '',
 		confirm: true,
 	};
@@ -159,6 +163,10 @@ class HomePage extends Component {
 		switch (name) {
 			case 'log_exercising':
 				return 'EXERCISE';
+			case 'log_studying':
+				return 'STUDY';
+			case 'log_resting':
+				return 'REST';
 			default:
 				return 'WORK';
 		}
@@ -171,11 +179,11 @@ class HomePage extends Component {
 
 		buildParsedResult.text = text;
 
-		if (intents.length !== 0 && intents[0].confidence >= 0.8) {
+		if (intents.length !== 0 && intents[0].confidence >= 0.65) {
 			buildParsedResult.category = intents[0].name;
 			Object.values(entities).forEach((element) => {
 				const currentElement = element[0];
-				if (currentElement.confidence <= 0.8) {
+				if (currentElement.confidence <= 0.65) {
 					lowConf = true;
 				} else {
 					if (currentElement.name.includes('wit$duration')) {
@@ -288,6 +296,14 @@ class HomePage extends Component {
 		);
 	};
 
+	toggleAudioModal = () => {
+		this.setState((state, props) => ({ audioModalOpen: !state.audioModalOpen }));
+	};
+
+	toggleUploadModal = () => {
+		this.setState((state, props) => ({ uploadModalOpen: !state.uploadModalOpen }));
+	};
+
 	toggleCancelModal = () => {
 		this.setState((state, props) => ({ cancelModalOpen: !state.cancelModalOpen }));
 	};
@@ -297,7 +313,7 @@ class HomePage extends Component {
 	};
 
 	render() {
-		const { toast, isLoaded, cancelModalOpen } = this.state;
+		const { toast, isLoaded, cancelModalOpen, audioModalOpen, uploadModalOpen } = this.state;
 		const closeBtn = (
 			<button className='close' onClick={this.toggleCancelModal}>
 				&times;
@@ -340,6 +356,43 @@ class HomePage extends Component {
 							</Button>
 						</ModalFooter>
 					</Modal>
+					<Modal isOpen={audioModalOpen} toggle={this.toggleAudioModal}>
+						<ModalHeader toggle={this.toggleAudioModal}>Record</ModalHeader>
+						<ModalBody>
+							<div className='text-center'>
+								<Alert color='warning'>
+									Sorry, this feature is too buggy so we removed it for now.
+								</Alert>
+								<div className='disable'>
+									<p>Recording in progress ...</p>
+									<Progress />
+									<p>0%</p>
+								</div>
+							</div>
+						</ModalBody>
+						<ModalFooter>
+							<Button color='primary' onClick={this.toggleAudioModal}>
+								Done
+							</Button>{' '}
+							<Button color='secondary' onClick={this.toggleAudioModal}>
+								Cancel
+							</Button>
+						</ModalFooter>
+					</Modal>
+					<Modal isOpen={uploadModalOpen} toggle={this.toggleUploadModal}>
+						<ModalHeader toggle={this.toggleUploadModal}>Upload Audio</ModalHeader>
+						<ModalBody>
+							<div className='text-center'></div>
+						</ModalBody>
+						<ModalFooter>
+							<Button color='primary' onClick={this.toggleUploadModal}>
+								Do Something
+							</Button>{' '}
+							<Button color='secondary' onClick={this.toggleUploadModal}>
+								Cancel
+							</Button>
+						</ModalFooter>
+					</Modal>
 					<HeaderText />
 					{isLoaded ? <Spinner className='text-box-spinner' animation='border' /> : ''}
 					<Form className='user-input-form' onSubmit={this.onFormSubmit.bind(this)}>
@@ -355,7 +408,7 @@ class HomePage extends Component {
 									placeholder='Try this, "I spent 4 hours emailing coworkers for work"'
 								/>
 								<div className='microphone-container'>
-									<Audio />
+									<Audio handleMicrophoneClick={this.toggleAudioModal} />
 								</div>
 							</div>
 
