@@ -18,6 +18,9 @@ class Header extends Component {
 							<Link className='link-option remove-dec' to='/'>
 								home
 							</Link>
+							<Link className='link-option remove-dec' to='/about'>
+								about
+							</Link>
 							<Link className='link-option remove-dec' to='/metrics'>
 								metrics
 							</Link>

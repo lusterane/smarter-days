@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from './components/Shared/Header/Header';
 import HomePage from './components/Pages/HomePage/HomePage';
 import MetricsPage from './components/Pages/MetricsPage/MetricsPage';
+import AboutPage from './components/Pages/AboutPage/AboutPage';
 
 import './App.css';
 
@@ -21,6 +22,9 @@ class App extends Component {
 							</Route>
 							<Route path={process.env.PUBLIC_URL + '/metrics'}>
 								<MetricsPage />
+							</Route>
+							<Route path={process.env.PUBLIC_URL + '/about'}>
+								<AboutPage />
 							</Route>
 						</Switch>
 					</Router>

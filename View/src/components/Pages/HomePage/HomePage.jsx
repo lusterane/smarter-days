@@ -46,9 +46,30 @@ class HomePage extends Component {
 			message: '-',
 		},
 		sampleText: [
-			'I called Mike for work for 10 hours',
-			'I did calisthenics for 3 hours on September 25, 2020',
-			'I ran from 2pm to 4pm at Menlo Park.',
+			'I did programming for work for three hours',
+			'I did paperwork for work for thirty minutes',
+			'I did construction for work for an hour and fifteen minutes',
+			'I proofread resumes for work from 12 pm to 3 pm',
+			'I wrote articles for work from 9 pm to 11 pm',
+			'I crafted tables for work from 7 am to 12 pm',
+			'I waited tables for work in Austin, TX for five hours',
+			'I debugged code for work in Seattle, WA for half an hour',
+			'I babysat toddlers for work in Washington D.C. for nine hours',
+			'I ran for an hour',
+			'I lifted weights for two hours',
+			'I went swimming for half an hour',
+			'I did gymnastics from 7 am to 8 am',
+			'I danced from 5 pm to 9 pm',
+			'I did yoga from 5 am to 6 am',
+			'I went biking in Oklahoma for five hours',
+			'I did stretching at the gym for an hour',
+			'I did jumping jacks at home for five minutes',
+			'I studied biology for two hours',
+			'I did economics for three hours',
+			'I practiced German for an hour',
+			'I did economics from 8 am to 9 am',
+			'I did astronomy from 9 pm to 11 pm',
+			'I did philosophy from 8 am to 10 am',
 		],
 		isLoaded: false,
 		cancelModalOpen: false,
@@ -179,11 +200,11 @@ class HomePage extends Component {
 
 		buildParsedResult.text = text;
 
-		if (intents.length !== 0 && intents[0].confidence >= 0.65) {
+		if (intents.length !== 0 && intents[0].confidence >= 0.6) {
 			buildParsedResult.category = intents[0].name;
 			Object.values(entities).forEach((element) => {
 				const currentElement = element[0];
-				if (currentElement.confidence <= 0.65) {
+				if (currentElement.confidence <= 0.6) {
 					lowConf = true;
 				} else {
 					if (currentElement.name.includes('wit$duration')) {

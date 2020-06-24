@@ -1,18 +1,18 @@
-.about-page-container {
+.how-to-page-container {
 	padding: 5rem 10rem;
 }
 
-.what-is-this-container,
+.how-it-works-container,
 .about-us-container {
 	padding-bottom: 5rem;
+}
+
+.sub-container {
+	padding-bottom: 3rem;
 }
 
 .video-container {
 	display: flex;
 	margin-top: 2rem;
 	justify-content: center;
-}
-
-.sub-container {
-	padding-bottom: 3rem;
 }
