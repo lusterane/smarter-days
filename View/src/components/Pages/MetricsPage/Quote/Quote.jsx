@@ -34,7 +34,7 @@ class Quote extends Component {
 		};
 		const proxyurl = 'https://cors-anywhere.herokuapp.com/';
 		const url = 'https://type.fit/api/quotes';
-		const response = await fetch(proxyurl + url, requestOptions)
+		const response = await fetch(url, requestOptions)
 			.then((res) => res.json({ message: 'Recieved' }))
 			.then(
 				(result) => {

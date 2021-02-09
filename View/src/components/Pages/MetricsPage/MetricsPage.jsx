@@ -76,6 +76,7 @@ class MetricsPage extends Component {
 
 	stepFunction = (intents, paramView) => {
 		let ret_intents = this.sortByDates(intents);
+		ret_intents = this.updateDatesDEMO(ret_intents);
 		ret_intents = this.filterForDates(ret_intents, paramView);
 		ret_intents = this.setSumDuration(ret_intents);
 
@@ -124,6 +125,26 @@ class MetricsPage extends Component {
 
 		return sortedIntents;
 	};
+
+	updateDatesDEMO = (intents) => {
+		let filteredIntents = JSON.parse(JSON.stringify(intents));
+		const nowDate = new Date();
+
+		filteredIntents.forEach((intent) => {
+			intent.elements.forEach((element) => {
+				let element_date = new Date(element.date);
+
+				element.date = new Date(element_date.setMonth(nowDate.getMonth()));
+				element.date = new Date(element_date.setYear(nowDate.getFullYear()));
+				console.log(nowDate.getYear());
+
+				console.log(element.date);
+			});
+		});
+
+		return filteredIntents;
+	};
+
 	filterForDates = (intents, paramView) => {
 		const view = paramView ? paramView : this.state.view;
 
@@ -314,15 +335,15 @@ class MetricsPage extends Component {
 		const { filteredIntents, timeDropDownStatus, timeInterval, view } = this.state;
 		return (
 			<React.Fragment>
-				<div className='metrics-page-container'>
-					<Nav tabs className='view-nav'>
+				<div className="metrics-page-container">
+					<Nav tabs className="view-nav">
 						<NavItem>
 							<NavLink
 								active={view === 'day'}
 								onClick={() => {
 									this.handleViewDropDownClick('day');
 								}}
-								className='pointer'
+								className="pointer"
 							>
 								Day
 							</NavLink>
@@ -333,7 +354,7 @@ class MetricsPage extends Component {
 								onClick={() => {
 									this.handleViewDropDownClick('week');
 								}}
-								className='pointer'
+								className="pointer"
 							>
 								Week
 							</NavLink>
@@ -344,15 +365,15 @@ class MetricsPage extends Component {
 								onClick={() => {
 									this.handleViewDropDownClick('month');
 								}}
-								className='pointer'
+								className="pointer"
 							>
 								Month
 							</NavLink>
 						</NavItem>
 					</Nav>
-					<UncontrolledDropdown className='uncontrolled-dropdown'>
-						<DropdownToggle tag='a'>
-							<span className='time-interval-text remove-dec pointer'>
+					<UncontrolledDropdown className="uncontrolled-dropdown">
+						<DropdownToggle tag="a">
+							<span className="time-interval-text remove-dec pointer">
 								<FontAwesomeIcon icon={faAngleDoubleRight} /> Your {view} in{' '}
 								{timeInterval} <FontAwesomeIcon icon={faCaretDown} />
 							</span>
@@ -384,19 +405,19 @@ class MetricsPage extends Component {
 							</DropdownItem>
 						</DropdownMenu>
 					</UncontrolledDropdown>
-					<div className='visualizations-container'>
-						<div className='top-container'>
-							<div className='pie-chart-container'>
-								<div className='pie-chart-visual-container'>
-									<Card body className='pie-chart-card'>
-										<PieChart intents={filteredIntents} id='pie-chart' />
+					<div className="visualizations-container">
+						<div className="top-container">
+							<div className="pie-chart-container">
+								<div className="pie-chart-visual-container">
+									<Card body className="pie-chart-card">
+										<PieChart intents={filteredIntents} id="pie-chart" />
 									</Card>
 								</div>
 							</div>
 							<Quote />
 						</div>
-						<div className='area-chart-container'>
-							<div className='area-chart-visual-container'>
+						<div className="area-chart-container">
+							<div className="area-chart-visual-container">
 								<Card body>
 									<AreaChart
 										intents={filteredIntents}
@@ -406,7 +427,7 @@ class MetricsPage extends Component {
 							</div>
 						</div>
 
-						<div className='table-container'>
+						<div className="table-container">
 							<Table intents={filteredIntents} timeInterval={timeInterval} />
 						</div>
 					</div>
