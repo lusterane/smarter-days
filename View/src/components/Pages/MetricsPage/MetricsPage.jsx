@@ -9,6 +9,7 @@ import {
 	DropdownMenu,
 	NavLink,
 	Card,
+	Alert,
 } from 'reactstrap';
 
 import PieChart from './PieChart/PieChart';
@@ -92,8 +93,10 @@ class MetricsPage extends Component {
 						(new Date(element.toDateTime.value).getTime() -
 							new Date(element.fromDateTime.value).getTime()) /
 						1000; // seconds
+
 					element.duration.value = duration;
 					element.date = element.fromDateTime.value;
+					// console.log(element);
 				}
 			});
 		});
@@ -136,9 +139,6 @@ class MetricsPage extends Component {
 
 				element.date = new Date(element_date.setMonth(nowDate.getMonth()));
 				element.date = new Date(element_date.setYear(nowDate.getFullYear()));
-				console.log(nowDate.getYear());
-
-				console.log(element.date);
 			});
 		});
 
@@ -336,6 +336,15 @@ class MetricsPage extends Component {
 		return (
 			<React.Fragment>
 				<div className="metrics-page-container">
+					<Alert variant="info">
+						<div className="alert-box">
+							I'm on free-tier hosting. The page may load slowly or crash!
+						</div>
+						<br></br>
+						<div className="alert-box">
+							Please wait at least 15s for stuff to load or refresh. Thank you!!
+						</div>
+					</Alert>
 					<Nav tabs className="view-nav">
 						<NavItem>
 							<NavLink
