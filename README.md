@@ -20,7 +20,7 @@ Also, I have been developing the full-stack web application that users will inte
 
 ## When?
 
-Deadline is **5:00pm EDT Jun 24, 2020**.
+Deadline is **5:00pm EDT Jun 24, 2020**
 
 ## Tech
 
