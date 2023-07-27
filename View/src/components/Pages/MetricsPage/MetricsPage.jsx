@@ -338,11 +338,17 @@ class MetricsPage extends Component {
 				<div className="metrics-page-container">
 					<Alert variant="info">
 						<div className="alert-box">
-							I'm on free-tier hosting. The page may load slowly or crash!
+							Due to pricing changes to server hosting, I will no longer be able to
+							support this project.
 						</div>
 						<br></br>
 						<div className="alert-box">
-							Please wait at least 15s for stuff to load or refresh. Thank you!!
+							If you're curious how this project looks when it was working, check it
+							out the{' '}
+							<a href="https://smarter-days.web.app/about" class="alert-link">
+								demo here
+							</a>
+							!
 						</div>
 					</Alert>
 					<Nav tabs className="view-nav">
