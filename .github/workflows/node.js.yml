@@ -33,6 +33,6 @@ jobs:
               with:
                   args: deploy --only hosting
               env:
-                  GCP_SA_KEY: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+                  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
                   PROJECT_PATH: ./View
                   FIREBASE_PROJECT: smarter-days
