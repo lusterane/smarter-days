@@ -35,4 +35,4 @@ jobs:
               env:
                   GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
                   PROJECT_PATH: ./View
-                  FIREBASE_PROJECT: smarter-days
+                  FIREBASE_PROJECT: ${{ secrets.FIREBASE_PROJECT }}
