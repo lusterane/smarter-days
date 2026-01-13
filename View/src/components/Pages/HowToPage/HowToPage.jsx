@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Alert } from 'reactstrap';
+
+import './HowToPage.css';
 
 class HowToPage extends Component {
 	state = {};
@@ -6,6 +9,13 @@ class HowToPage extends Component {
 		return (
 			<React.Fragment>
 				<div className='how-to-page-container'>
+					<Alert color='warning' className='discontinuation-notice'>
+						<strong>⚠️ Project Discontinued:</strong> Due to rising cloud hosting and infrastructure costs, this project is no longer actively maintained. Thank you to everyone who used and supported Smarter Days!
+						<br />
+						<a href='https://www.youtube.com/watch?v=O_BACzyrwBU' target='_blank' rel='noopener noreferrer' className='demo-link'>
+							📺 Watch the demo video
+						</a>
+					</Alert>
 					<div className='how-it-works-container'>
 						<div className='sub-container'>
 							<h1>How it works</h1>

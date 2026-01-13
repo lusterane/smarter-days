@@ -2,6 +2,29 @@
 	padding: 5rem 10rem;
 }
 
+.discontinuation-notice {
+	max-width: 600px;
+	text-align: center;
+	margin: 0 auto 2rem auto;
+	padding: 1.25rem 1.5rem;
+	border-radius: 8px;
+	background-color: #fff3cd;
+	border: 1px solid #ffc107;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.discontinuation-notice .demo-link {
+	display: inline-block;
+	margin-top: 0.75rem;
+	color: #856404;
+	font-weight: 600;
+	text-decoration: underline;
+}
+
+.discontinuation-notice .demo-link:hover {
+	color: #533f03;
+}
+
 .how-it-works-container,
 .about-us-container {
 	padding-bottom: 5rem;

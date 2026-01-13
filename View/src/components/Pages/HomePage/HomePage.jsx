@@ -414,8 +414,15 @@ class HomePage extends Component {
 							</Button>
 						</ModalFooter>
 					</Modal>
-					<HeaderText />
-					{isLoaded ? <Spinner className='text-box-spinner' animation='border' /> : ''}
+				<Alert color='warning' className='discontinuation-notice'>
+					<strong>⚠️ Project Discontinued:</strong> Due to rising cloud hosting and infrastructure costs, this project is no longer actively maintained. Thank you to everyone who used and supported Smarter Days!
+					<br />
+					<a href='https://www.youtube.com/watch?v=O_BACzyrwBU' target='_blank' rel='noopener noreferrer' className='demo-link'>
+						📺 Watch the demo video
+					</a>
+				</Alert>
+				<HeaderText />
+				{isLoaded ? <Spinner className='text-box-spinner' animation='border' /> : ''}
 					<Form className='user-input-form' onSubmit={this.onFormSubmit.bind(this)}>
 						<FormGroup row className='form-group'>
 							<div className='user-input-row-wrapper'>

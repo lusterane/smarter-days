@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Alert } from 'reactstrap';
 
 import './AboutPage.css';
 
@@ -8,6 +9,13 @@ class AboutPage extends Component {
 		return (
 			<React.Fragment>
 				<div className="about-page-container">
+					<Alert color='warning' className='discontinuation-notice'>
+						<strong>⚠️ Project Discontinued:</strong> Due to rising cloud hosting and infrastructure costs, this project is no longer actively maintained. Thank you to everyone who used and supported Smarter Days!
+						<br />
+						<a href='https://www.youtube.com/watch?v=O_BACzyrwBU' target='_blank' rel='noopener noreferrer' className='demo-link'>
+							📺 Watch the demo video
+						</a>
+					</Alert>
 					<div className="demo-container">
 						<div className="sub-container">
 							<h1>Demo</h1>

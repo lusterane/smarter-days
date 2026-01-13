@@ -9,6 +9,29 @@
 	position: relative;
 }
 
+.discontinuation-notice {
+	max-width: 600px;
+	text-align: center;
+	margin-bottom: 2rem;
+	padding: 1.25rem 1.5rem;
+	border-radius: 8px;
+	background-color: #fff3cd;
+	border: 1px solid #ffc107;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.discontinuation-notice .demo-link {
+	display: inline-block;
+	margin-top: 0.75rem;
+	color: #856404;
+	font-weight: 600;
+	text-decoration: underline;
+}
+
+.discontinuation-notice .demo-link:hover {
+	color: #533f03;
+}
+
 .user-input-box {
 	width: 50vw !important;
 	padding: 1.3rem 1.5rem !important;

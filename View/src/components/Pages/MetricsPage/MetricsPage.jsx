@@ -336,20 +336,12 @@ class MetricsPage extends Component {
 		return (
 			<React.Fragment>
 				<div className="metrics-page-container">
-					<Alert variant="info">
-						<div className="alert-box">
-							Due to pricing changes to server hosting, I will no longer be able to
-							support this project.
-						</div>
-						<br></br>
-						<div className="alert-box">
-							If you're curious how this project looks when it was working, check it
-							out the{' '}
-							<a href="https://smarter-days.web.app/about" class="alert-link">
-								demo here
-							</a>
-							!
-						</div>
+					<Alert color='warning' className='discontinuation-notice'>
+						<strong>⚠️ Project Discontinued:</strong> Due to rising cloud hosting and infrastructure costs, this project is no longer actively maintained. Thank you to everyone who used and supported Smarter Days!
+						<br />
+						<a href='https://www.youtube.com/watch?v=O_BACzyrwBU' target='_blank' rel='noopener noreferrer' className='demo-link'>
+							📺 Watch the demo video
+						</a>
 					</Alert>
 					<Nav tabs className="view-nav">
 						<NavItem>
