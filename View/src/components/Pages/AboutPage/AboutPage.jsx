@@ -9,11 +9,11 @@ class AboutPage extends Component {
 		return (
 			<React.Fragment>
 				<div className="about-page-container">
-					<Alert color='warning' className='discontinuation-notice'>
-						<strong>⚠️ Project Discontinued:</strong> Due to rising cloud hosting and infrastructure costs, this project is no longer actively maintained. Thank you to everyone who used and supported Smarter Days!
+					<Alert color='info' className='discontinuation-notice'>
+						<strong>📢 Notice:</strong> This project is no longer actively maintained due to infrastructure costs. Curious how it worked?
 						<br />
 						<a href='https://www.youtube.com/watch?v=O_BACzyrwBU' target='_blank' rel='noopener noreferrer' className='demo-link'>
-							📺 Watch the demo video
+							🎬 Check out the demo here!
 						</a>
 					</Alert>
 					<div className="demo-container">

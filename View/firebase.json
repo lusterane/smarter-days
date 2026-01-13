@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "smarter-days",
     "public": "build",
     "ignore": [
       "firebase.json",
